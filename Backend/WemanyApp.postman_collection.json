@@ -1,0 +1,210 @@
+{
+	"info": {
+		"_postman_id": "d54aa1e1-32d5-4982-96f3-8900ffb7c5d2",
+		"name": "WemanyApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\":\"brucewayne4@gmail.com\",\n\"username\":\"brucewayne4\",\n\"roles\":[\"admin\"],\n\"password\":\"brucewayne4\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\":\"brucewayne4@gmail.com\",\n\"username\":\"brucewayne4\",\n\"roles\":[\"admin\"],\n\"password\":\"brucewayne4\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/auth/admin/product/",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVjZXdheW5lNEBnbWFpbC5jb20iLCJpYXQiOjE2MjczODU2NjUsImV4cCI6MTYyNzQ3MjA2NX0.es3gI0NPPSpZGwlOzLo_R5HI4I2pmQPeuNln8NNoSzBKFgBqh1lwJcKXt2RlTmtlnWuCIp9ZZ_LtwvowCPsVpA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Hello",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "1212",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "co2Emission",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/ruain-office/Pictures/Screenshot from 2021-07-12 10-33-11.png"
+						},
+						{
+							"key": "category",
+							"value": "aa",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/admin/product/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"admin",
+						"product",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/auth/admin/product/",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVjZXdheW5lNEBnbWFpbC5jb20iLCJpYXQiOjE2MjczODU2NjUsImV4cCI6MTYyNzQ3MjA2NX0.es3gI0NPPSpZGwlOzLo_R5HI4I2pmQPeuNln8NNoSzBKFgBqh1lwJcKXt2RlTmtlnWuCIp9ZZ_LtwvowCPsVpA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/auth/admin/product/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"admin",
+						"product",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/auth/admin/product/60fffc42e4491942ee23283c",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVjZXdheW5lNEBnbWFpbC5jb20iLCJpYXQiOjE2MjczODU2NjUsImV4cCI6MTYyNzQ3MjA2NX0.es3gI0NPPSpZGwlOzLo_R5HI4I2pmQPeuNln8NNoSzBKFgBqh1lwJcKXt2RlTmtlnWuCIp9ZZ_LtwvowCPsVpA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/auth/admin/product/60fffc42e4491942ee23283c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"admin",
+						"product",
+						"60fffc42e4491942ee23283c"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
