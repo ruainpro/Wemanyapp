@@ -1,18 +1,21 @@
 package com.dao.wethemany.services;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
+import com.dao.wethemany.models.Carts;
 import com.dao.wethemany.models.Product;
 import com.dao.wethemany.models.PurchasedProduct;
 import com.dao.wethemany.models.Purchasing;
+import com.dao.wethemany.repository.Carts_Repository;
 import com.dao.wethemany.repository.ProductRepository;
 import com.dao.wethemany.repository.PurchasingInfoRepository;
 import com.dao.wethemany.response.MessageResponse;
@@ -26,9 +29,26 @@ public class PurchasingProductServices {
 	@Autowired
 	ProductRepository productRepository;
 	
+	@Autowired
+	Carts_Repository carts_Repository;
+	
+	@Autowired
+	MongoOperations mongoOperations;
+	
 	public void purchaseProduct(Purchasing purchasing) {
 		
 		purchasing.setPurchasedDate(new Date());
+		
+		for(PurchasedProduct purchasedProduct:purchasing.getPurchasedproduct()) {
+
+		    Query query = new Query();
+		    query.addCriteria(Criteria.where("cartsStatus").is("False"));
+
+		    Carts cartsTest = mongoOperations.findOne(query, Carts.class);
+		    //modify and update with save()
+		    cartsTest.setId(purchasedProduct.getProductId());
+		    mongoOperations.save(cartsTest);
+		}
 		
 		purchasingInfoRepository.save(purchasing);
 		
@@ -52,15 +72,15 @@ public class PurchasingProductServices {
 			
 		}
 		
-		messageResponse.setReturnValueList(purchasingResponse);
+		messageResponse.setPurchasedValueList(purchasingResponse);
         messageResponse.setHttpStatus(HttpStatus.OK);
-        messageResponse.setReturnStatus(200);
+        messageResponse.setReturnStatus(1);
         messageResponse.setMessage("Sucessfully Retrieved Data");	
 		}
 		else {
 			
 	        messageResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
-	        messageResponse.setReturnStatus(400);
+	        messageResponse.setReturnStatus(0);
 	        messageResponse.setMessage("Sucessfully Not Retrieved Data");	
 			
 		}
@@ -80,11 +100,11 @@ public class PurchasingProductServices {
 		if(existOrNot ==true) {
 			purchasingInfoRepository.deleteById(id);
 	        messageResponse.setHttpStatus(HttpStatus.OK);
-	        messageResponse.setReturnStatus(200);
+	        messageResponse.setReturnStatus(1);
 	        messageResponse.setMessage("Sucessfully Retrieved Data");	
 		}else {
 	        messageResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
-	        messageResponse.setReturnStatus(400);
+	        messageResponse.setReturnStatus(0);
 	        messageResponse.setMessage("Sucessfully Not Retrieved Data");
 		}
 

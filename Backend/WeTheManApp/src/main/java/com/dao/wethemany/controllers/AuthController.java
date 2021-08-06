@@ -20,6 +20,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dao.wethemany.models.ERole;
+import com.dao.wethemany.models.Purchasing;
 import com.dao.wethemany.models.Role;
 import com.dao.wethemany.models.User;
 import com.dao.wethemany.request.LoginRequest;
@@ -47,6 +49,11 @@ import com.dao.wethemany.services.UserDetailsImpl;
 import com.dao.wethemany.repository.UserRepository;
 import com.dao.wethemany.repository.RoleRepository;
 import com.dao.wethemany.jwtsecurity.JwtUtils;
+
+import com.dao.wethemany.services.PurchasingProductServices;
+import com.dao.wethemany.services.Payment_Services;
+import com.dao.wethemany.services.Others_Services;
+
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -68,6 +75,15 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 	
+	@Autowired
+	PurchasingProductServices purchasingProductServices;
+	
+	@Autowired
+	Payment_Services payment_Services;
+	
+	@Autowired
+	Others_Services others_Services;
+	
 	
 
     @RequestMapping(value = "/getImages/{Images}", method = RequestMethod.GET,
@@ -88,7 +104,6 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-		System.out.println(loginRequest.toString());
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -118,6 +133,9 @@ public class AuthController {
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			MessageResponse messageResponse=new MessageResponse();
 			messageResponse.setMessage("Error: Email is already in use!");
+			messageResponse.setReturnStatus(0);
+			messageResponse.setHttpStatus(HttpStatus.ALREADY_REPORTED);
+//			messageResponse.set
 			return ResponseEntity
 					.badRequest()
 					.body(messageResponse);
@@ -164,6 +182,21 @@ public class AuthController {
 		messageResponse.setMessage("User registered successfully!");
 
 		return ResponseEntity.ok(messageResponse);
+	}
+	
+	
+	@PostMapping("/getpaymentWork")
+	public ResponseEntity<?>  getAllPurchasedProduct(@RequestBody Purchasing purchasisng) {
+
+		return ResponseEntity.ok(payment_Services.createCharge(purchasisng));
+	}
+	
+	
+	@PostMapping("/calculateTheCo02/{productvalue}")
+	public ResponseEntity<?>  calculateTheCo02(@PathVariable(name = "productvalue") double productvalue) {
+
+		
+		return ResponseEntity.ok(others_Services.calculateC02Emission(productvalue));
 	}
 	
 

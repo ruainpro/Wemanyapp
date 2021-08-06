@@ -7,11 +7,35 @@ public class PaymentInfo {
 	private double payment_Amount;
 	
 	private String paymentInfo;
+	
+	private String paymentreturnsid;
+	
+	private String paymentreturnRecipt;
+	
+	
+	
+
+	public String getPaymentreturnsid() {
+		return paymentreturnsid;
+	}
+
+	public void setPaymentreturnsid(String paymentreturnsid) {
+		this.paymentreturnsid = paymentreturnsid;
+	}
+
+	public String getPaymentreturnRecipt() {
+		return paymentreturnRecipt;
+	}
+
+	public void setPaymentreturnRecipt(String paymentreturnRecipt) {
+		this.paymentreturnRecipt = paymentreturnRecipt;
+	}
 
 	@Override
 	public String toString() {
 		return "PaymentInfo [paymentMedium=" + paymentMedium + ", payment_Amount=" + payment_Amount + ", paymentInfo="
-				+ paymentInfo + "]";
+				+ paymentInfo + ", paymentreturnsid=" + paymentreturnsid + ", paymentreturnRecipt="
+				+ paymentreturnRecipt + "]";
 	}
 
 	public String getPaymentMedium() {
