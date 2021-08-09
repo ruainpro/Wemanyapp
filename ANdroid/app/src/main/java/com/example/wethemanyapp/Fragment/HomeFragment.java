@@ -1,14 +1,21 @@
 package com.example.wethemanyapp.Fragment;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.os.FileUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +29,8 @@ import android.widget.Toast;
 import com.example.wethemanyapp.R;
 import com.example.wethemanyapp.Url;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +51,8 @@ public class HomeFragment extends Fragment {
     int carbonconstant= 52;
 
     int companyemission= 100;
+
+    String UserEmail="";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -83,30 +94,31 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
        View view= inflater.inflate(R.layout.fragment_home, container, false);
+        //Retrieve token wherever necessary
+        SharedPreferences preferences = getActivity().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+        UserEmail = preferences.getString("User_EMAIL",null);//second parameter default value.
 
+//        Getting flating button and initialising to here
         FloatingActionButton floatingActionButton=(FloatingActionButton) view.findViewById(R.id.add_fab);
+        // On clicking the floating Button for calculating it will render it to here
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 displayAlert("Payment completed",
                         true);
             }
         });
 
         TextView home_nameofront=view.findViewById(R.id.home_nameofront);
-        home_nameofront.setText(Url.user);
+        home_nameofront.setText(UserEmail);
 
+        // Social Media Part
         ImageView imageView4_Facebook=(ImageView) view.findViewById(R.id.imageView4);
         imageView4_Facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                try {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                } catch (Exception e) {
-                    intent =  new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                }
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
+                startActivity(browserIntent);
 
             }
         });
@@ -115,25 +127,18 @@ public class HomeFragment extends Fragment {
         imageView10_Youtube.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                try {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                } catch (Exception e) {
-                    intent =  new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                }
-
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/"));
+                startActivity(browserIntent);
             }
         });
+
         ImageView imageView11_Instagram=(ImageView) view.findViewById(R.id.imageView11);
         imageView11_Instagram.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                try {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                } catch (Exception e) {
-                    intent =  new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                }
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/we.themany/"));
+                startActivity(browserIntent);
+
 
             }
         });
@@ -142,12 +147,11 @@ public class HomeFragment extends Fragment {
         imageView12_Gmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                try {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                } catch (Exception e) {
-                    intent =  new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                }
+                Intent email= new Intent(Intent.ACTION_SENDTO);
+                email.setData(Uri.parse("mailto:hello@wethemany.com.au"));
+                email.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                email.putExtra(Intent.EXTRA_TEXT, "My Email message");
+                startActivity(email);
 
             }
         });
@@ -155,15 +159,15 @@ public class HomeFragment extends Fragment {
         imageView13_Whatsapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                try {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                } catch (Exception e) {
-                    intent =  new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/wethemany.com.au"));
-                }
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:0123456789"));
+                startActivity(callIntent);
 
             }
         });
+        // Social Media Part
+
+
         return view;
     }
 
@@ -179,22 +183,41 @@ public class HomeFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        Button buttonToCalculateoOfProductValue = customLayout.findViewById(R.id.button3_c02calcuate);
 
+        ImageView imageView14_downloadfile = customLayout.findViewById(R.id.imageView14_downloadfile);
+        imageView14_downloadfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://localhost:8080/api/auth/getImages/C02Calcuation.pdf"));
+                startActivity(browserIntent);
+
+            }
+        });
+
+
+        Button buttonToCalculateoOfProductValue = customLayout.findViewById(R.id.button3_c02calcuate);
         buttonToCalculateoOfProductValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText edittextofproductvalue = customLayout.findViewById(R.id.c02_productvaluefinal);
-                double productvalue= Double.valueOf(edittextofproductvalue.getText().toString());
+                String edittextofproductvalueStringVal=edittextofproductvalue.getText().toString();
+                if(! edittextofproductvalueStringVal.isEmpty()){
+                    double productvalue= Double.valueOf(edittextofproductvalueStringVal);
 
-                CardView cardview_co2emission=customLayout.findViewById(R.id.cardview_co2emission);
-                TextView c02emissison_actualanswer=customLayout.findViewById(R.id.c02emissison_actualanswer);
+                    CardView cardview_co2emission=customLayout.findViewById(R.id.cardview_co2emission);
+                    TextView c02emissison_actualanswer=customLayout.findViewById(R.id.c02emissison_actualanswer);
 
-                double absosluteEmission=(productvalue/100);
-                double c02EmisisionValue=((productvalue*carbonconstant*absosluteEmission)/100);
+                    double absosluteEmission=(productvalue/100);
+                    double c02EmisisionValue=((productvalue*carbonconstant*absosluteEmission)/100);
 
-                cardview_co2emission.setVisibility(View.VISIBLE);
-                c02emissison_actualanswer.setText(String.valueOf(c02EmisisionValue));
+                    cardview_co2emission.setVisibility(View.VISIBLE);
+                    c02emissison_actualanswer.setText(String.valueOf(c02EmisisionValue) +" Per Year ");
+                }else{
+                    edittextofproductvalue.setError("Please Enter Data");
+
+                }
+
             }
         });
 

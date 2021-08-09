@@ -21,6 +21,11 @@
             android:padding="10dp">
 
 
+            <CheckBox
+                android:id="@+id/checkBox2_addforpayment"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content" />
+
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="28dp"

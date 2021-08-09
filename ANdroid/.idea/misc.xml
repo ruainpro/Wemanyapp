@@ -3,22 +3,56 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../layout/custom_preview.xml" value="0.16944444444444445" />
         <entry key="app/src/main/res/drawable-v24/background_rounded.xml" value="0.29259259259259257" />
+        <entry key="app/src/main/res/drawable-v24/button.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable-v24/buy_now_bg.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable-v24/detail_page_bg.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable-v24/detail_page_cart_button_bg.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable-v24/forget.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/drawable-v24/ic_arrow_back_black_24dp.xml" value="0.21041666666666667" />
+        <entry key="app/src/main/res/drawable-v24/ic_arrow_forward_black_24dp.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/drawable-v24/ic_back.xml" value="0.21041666666666667" />
+        <entry key="app/src/main/res/drawable-v24/ic_cart.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable-v24/ic_cart_black.xml" value="0.15185185185185185" />
+        <entry key="app/src/main/res/drawable-v24/ic_cat_bg.xml" value="0.15185185185185185" />
+        <entry key="app/src/main/res/drawable-v24/ic_filter.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable-v24/ic_heart.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/drawable-v24/ic_minus.xml" value="0.16296296296296298" />
+        <entry key="app/src/main/res/drawable-v24/ic_more.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable-v24/ic_plus.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/drawable-v24/ic_search_black_24dp.xml" value="0.2953703703703704" />
         <entry key="app/src/main/res/drawable-v24/linear_dotted_background.xml" value="0.32592592592592595" />
         <entry key="app/src/main/res/drawable/delete.xml" value="0.32407407407407407" />
+        <entry key="app/src/main/res/drawable/ic_cart.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_customsetting_background.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/drawable/ic_customsetting_foreground.xml" value="0.16296296296296298" />
+        <entry key="app/src/main/res/drawable/ic_deletecustom_background.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_deletecustom_foreground.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_facebook_background.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/drawable/ic_facebook_foreground.xml" value="0.15833333333333333" />
+        <entry key="app/src/main/res/drawable/ic_history.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_home_fish.xml" value="0.15185185185185185" />
+        <entry key="app/src/main/res/drawable/ic_home_fruits.xml" value="0.15185185185185185" />
+        <entry key="app/src/main/res/drawable/ic_home_meats.xml" value="0.15185185185185185" />
+        <entry key="app/src/main/res/drawable/ic_home_veggies.xml" value="0.15185185185185185" />
+        <entry key="app/src/main/res/drawable/ic_icons8_home.xml" value="0.15185185185185185" />
+        <entry key="app/src/main/res/drawable/ic_instagram_background.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_instagram_foreground.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_logoutcustommine.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_mailbox_background.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_mailbox_foreground.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_open_box.xml" value="0.1685185185185185" />
+        <entry key="app/src/main/res/drawable/ic_productaa_background.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/drawable/ic_search_black_24dp.xml" value="0.2953703703703704" />
+        <entry key="app/src/main/res/drawable/ic_user.xml" value="0.1685185185185185" />
         <entry key="app/src/main/res/drawable/search_bg.xml" value="0.2953703703703704" />
         <entry key="app/src/main/res/layout/activity_fragment_join_maian.xml" value="0.26403985507246375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3269927536231884" />
         <entry key="app/src/main/res/layout/activity_product_detail.xml" value="0.5" />
         <entry key="app/src/main/res/layout/cart_item.xml" value="0.32916666666666666" />
-        <entry key="app/src/main/res/layout/co2emissioncalculator.xml" value="0.20833333333333334" />
+        <entry key="app/src/main/res/layout/co2emissioncalculator.xml" value="0.33" />
         <entry key="app/src/main/res/layout/customcheckout.xml" value="0.3378623188405797" />
         <entry key="app/src/main/res/layout/fragment_cart_.xml" value="0.33958333333333335" />
         <entry key="app/src/main/res/layout/fragment_history_.xml" value="0.25905797101449274" />
@@ -28,6 +62,7 @@
         <entry key="app/src/main/res/layout/history_item.xml" value="0.33958333333333335" />
         <entry key="app/src/main/res/layout/historyitem.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/layout/product_items.xml" value="0.25905797101449274" />
+        <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.2838541666666667" />
       </map>
     </option>
   </component>

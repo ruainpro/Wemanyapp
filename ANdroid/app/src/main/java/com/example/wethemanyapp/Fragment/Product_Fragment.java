@@ -1,5 +1,7 @@
 package com.example.wethemanyapp.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -46,6 +48,7 @@ public class Product_Fragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    String BEARER_TOKEN="";
     RecyclerView productRecycleView;
 
     ProductFrame_Adapter productFrame_adapter;
@@ -91,21 +94,23 @@ public class Product_Fragment extends Fragment {
         }
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_product_, container, false);
 
+        SharedPreferences preferences = getActivity().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+        BEARER_TOKEN  = preferences.getString("BEARER_TOKEN",null);//second parameter default value.
+
         getAllPostData(view);
-
         productRecycleView = view.findViewById(R.id.Recycle_product_item);
-
         EditText earachTxt=view.findViewById(R.id.search_fragmentSeeting);
         earachTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -125,49 +130,57 @@ public class Product_Fragment extends Fragment {
 
     }
 
+    // It is an API  Parts where the backend server API is got hitten or request for Product List
     public void getAllPostData(View viww) {
 
         Interface_Product productClient = retrofit.create(Interface_Product.class);
-        String BearerToken="Bearer "+ Url.cookie;
-//      String BearerToken=Url.cookie;
-        Log.d(TAG,BearerToken);
+        String BearerToken="Bearer "+ BEARER_TOKEN;
         Call<MessageResponse> call = productClient.getALlProduct(BearerToken);
         call.enqueue(new Callback<MessageResponse>() {
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                     if (!response.isSuccessful()) {
-                        Log.d(TAG,"isSuccessful");
                     }
                     if (response.isSuccessful()) {
                         MessageResponse messageResponse=response.body();
                         returnValueList= messageResponse.getReturnValueList();
-                        setRecentlyViewedRecycler(returnValueList);
-
+                        if(returnValueList !=null){
+                            setRecentlyViewedRecycler(returnValueList);
+                        }
                     }
                 }
-
 
             @Override
             public void onFailure(Call<MessageResponse> call, Throwable t) {
             }
 
-
         });
-
-
     }
 
 
+    // It will help to attach the list of product data into Recycle  VIew in List
     private void setRecentlyViewedRecycler(ArrayList<Product> recentlyViewedDataList) {
 
+        if( ! recentlyViewedDataList.isEmpty() || recentlyViewedDataList !=null){
         ArrayList<Product> productarray = new ArrayList<Product>(recentlyViewedDataList);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
-        productRecycleView.setLayoutManager(layoutManager);
-        productFrame_adapter = new ProductFrame_Adapter(getContext(),productarray,productarray);
-        productRecycleView.setAdapter(productFrame_adapter);
-        productFrame_adapter.notifyDataSetChanged();
+
+
+        if(getContext() !=null){
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
+            productRecycleView.setLayoutManager(layoutManager);
+            productFrame_adapter = new ProductFrame_Adapter(getContext(),productarray,Product_Fragment.this);
+            productRecycleView.setAdapter(productFrame_adapter);
+            productFrame_adapter.notifyDataSetChanged();
+        }
+//            if(productFrame_adapter !=null){
+
+//            }
+
+        }
+
     }
 
+    // Whenever anayone search product  then it will filter that product from the list
     private void filter(String text) {
 
         ArrayList<Product> filteredlist= new ArrayList<Product>();

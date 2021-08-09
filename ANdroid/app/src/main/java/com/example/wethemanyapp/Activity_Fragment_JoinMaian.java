@@ -7,9 +7,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.example.wethemanyapp.Adapter.ViewPagerAdapter;
 import com.example.wethemanyapp.Fragment.Cart_Fragment;
@@ -18,6 +21,7 @@ import com.example.wethemanyapp.Fragment.HomeFragment;
 import com.example.wethemanyapp.Fragment.MyAccount_Fragment;
 import com.example.wethemanyapp.Fragment.Product_Fragment;
 import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -34,7 +38,9 @@ public class Activity_Fragment_JoinMaian extends AppCompatActivity {
     private MyAccount_Fragment myAccount_fragment;
     private Cart_Fragment cart_Fragment;
 
-
+    FrameLayout frameLayout;
+    private BottomNavigationView bottomNavigationView;
+    MenuItem meneuitem;
 
 
     @Override
@@ -45,65 +51,73 @@ public class Activity_Fragment_JoinMaian extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        viewPager = findViewById(R.id.view_pager);
-        tabLayout = findViewById(R.id.tab_layout);
-
         homeFragment = new HomeFragment();
         product_Fragment = new Product_Fragment();
         history_fragment = new History_Fragment();
         myAccount_fragment = new MyAccount_Fragment();
-        cart_Fragment=new Cart_Fragment();
-        tabLayout.setupWithViewPager(viewPager);
+        cart_Fragment = new Cart_Fragment();
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
-        viewPagerAdapter.addFragment(homeFragment, "Home");
-        viewPagerAdapter.addFragment(product_Fragment, "Product");
-        viewPagerAdapter.addFragment(cart_Fragment, "Cart");
-//        viewPagerAdapter.addFragment(history_fragment, "History");
-        viewPagerAdapter.addFragment(myAccount_fragment, "Account");
-        viewPager.setAdapter(viewPagerAdapter);
+        frameLayout = (FrameLayout) findViewById(R.id.mainframe);
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_icons8_home);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_open_box);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_cart_black);
-//        tabLayout.getTabAt(3).setIcon(R.drawable.ic_history);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_user);
+        Bundle bundle = new Bundle();
+        homeFragment = new HomeFragment();
+        homeFragment.setArguments(bundle);
 
-        BadgeDrawable badgeDrawable = tabLayout.getTabAt(0).getOrCreateBadge();
-        badgeDrawable.setVisible(true);
-        badgeDrawable.setNumber(12);
+
+        Bundle bundle2 = new Bundle();
+        product_Fragment = new Product_Fragment();
+        product_Fragment.setArguments(bundle2);
+
+        Bundle bundle3 = new Bundle();
+        cart_Fragment = new Cart_Fragment();
+        cart_Fragment.setArguments(bundle3);
+
+        Bundle bundle4 = new Bundle();
+        myAccount_fragment = new MyAccount_Fragment();
+        myAccount_fragment.setArguments(bundle4);
+
+
+        setFragment(homeFragment);
+
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottmnavigationmainnavs);
+        // It will select whichc icon or tabs is selected from menu or id and will render to it'ss specific Framelayout
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+
+                    case R.id.nav_home:
+                        setFragment(homeFragment);
+                        return true;
+
+                    case R.id.nav_Product:
+                        setFragment(product_Fragment);
+                        return true;
+
+                    case R.id.nav_Cart:
+                        setFragment(cart_Fragment);
+                        return true;
+
+                    case R.id.nav_Account:
+                        setFragment(myAccount_fragment);
+                        return true;
+
+                    default:
+                        return false;
+
+                }
+
+            }
+        });
 
     }
+    // It will help to add the fragment on the container frame orlayout i.e mainframe
+    private void setFragment(Fragment fragment) {
 
-//    private class ViewPagerAdapter extends FragmentPagerAdapter {
-//
-//        private List<Fragment> fragments = new ArrayList<>();
-//        private List<String> fragmentTitle = new ArrayList<>();
-//
-//        public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
-//            super(fm, behavior);
-//        }
-//
-//        public void addFragment(Fragment fragment, String title) {
-//            fragments.add(fragment);
-//            fragmentTitle.add(title);
-//        }
-//
-//        @NonNull
-//        @Override
-//        public Fragment getItem(int position) {
-//            return fragments.get(position);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return fragments.size();
-//        }
-//
-//        @Nullable
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            return fragmentTitle.get(position);
-//        }
-//    }
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.mainframe, fragment);
+        fragmentTransaction.commit();
+    }
+
 }

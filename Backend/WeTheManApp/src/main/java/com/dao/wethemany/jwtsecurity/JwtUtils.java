@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.dao.wethemany.services.UserDetailsImpl;
+import com.sun.security.auth.UserPrincipal;
 
 import io.jsonwebtoken.*;
 
@@ -57,4 +58,22 @@ public class JwtUtils {
 
 		return false;
 	}
+	
+	public void inValidateJwtToken(String authToken,  Authentication authentication) {
+		
+		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+
+		Jwts.builder()
+				.setSubject((userPrincipal.getUsername()))
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
+
+
+	}
+	
+	
+	
+	
 }

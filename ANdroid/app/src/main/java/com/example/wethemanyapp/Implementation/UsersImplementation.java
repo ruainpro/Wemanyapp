@@ -1,8 +1,12 @@
 package com.example.wethemanyapp.Implementation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -83,20 +87,26 @@ public class UsersImplementation {
                     if(!response.isSuccessful())
                     {
                         EditText editText=activity.findViewById(R.id.ediText_login_email);
-                        editText.setText("Invalid Credentials");
+                        editText.setError("Invalid Credentials");
                         EditText editText2=activity.findViewById(R.id.ediText_login_password);
-                        editText2.setText("Invalid Credentials");
+                        editText2.setError("Invalid Credentials");
                         getloginstatusfalse();
                     }
                    if(response.isSuccessful()) {
                        getloginstatus();
                        Url.user=response.body().getEmail();
-                       String mysession = response.headers().get("Set-Cookie");
                        Url.cookie=response.body().getAccessToken();
 
-                       System.out.println(response.toString());
+                       EditText editText=activity.findViewById(R.id.ediText_login_email);
+                       editText.setText("");
+                       EditText editText2=activity.findViewById(R.id.ediText_login_password);
+                       editText2.setText("");
+
+                       SharedPreferences preferences = context.getSharedPreferences("MY_APP",Context.MODE_PRIVATE);
+                       preferences.edit().putString("BEARER_TOKEN",response.body().getAccessToken()).apply();
+                       preferences.edit().putString("User_EMAIL",response.body().getEmail()).apply();
+
                        Intent intent = new Intent(context, Activity_Fragment_JoinMaian.class);
-                       intent.putExtra("mycookie",mysession);
                        context.startActivity(intent);
                    }
                     }
@@ -127,7 +137,39 @@ public class UsersImplementation {
                         getloginstatusfalse();
                     }
                     if(response.isSuccessful()) {
-                        Toast.makeText(context, "Sucessfully Created An Account", Toast.LENGTH_SHORT).show();
+                        EditText ediText_register_email= (EditText) activity.findViewById(R.id.ediText_register_email);
+                        ediText_register_email.setText("");
+                        EditText ediText_register_password= (EditText) activity.findViewById(R.id.ediText_register_password);
+                        ediText_register_password.setText("");
+                        EditText ediText_register_confirmpassword= (EditText) activity.findViewById(R.id.ediText_register_confirmpassword);
+                        ediText_register_confirmpassword.setText("");
+
+                        final AlertDialog.Builder dialog = new AlertDialog.Builder(activity).setTitle("Sucessfull").
+                                setMessage("Sucessfully Created Account");
+
+                        final AlertDialog alert = dialog.create();
+                        alert.show();
+
+// Hide after some seconds
+                        final Handler handler  = new Handler();
+                        final Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (alert.isShowing()) {
+                                    alert.dismiss();
+                                }
+                            }
+                        };
+
+                        alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                handler.removeCallbacks(runnable);
+                            }
+                        });
+
+                        handler.postDelayed(runnable, 2000);
+
                         getloginstatus();
 
                     }

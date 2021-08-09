@@ -1,10 +1,15 @@
 package com.example.wethemanyapp.Implementation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.wethemanyapp.Activity_Fragment_JoinMaian;
 import com.example.wethemanyapp.Interface.Interface_Product;
@@ -36,6 +41,7 @@ public class ProductImplementation {
 
     OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
     Retrofit.Builder builder = new Retrofit.Builder().baseUrl(Url.URLone).addConverterFactory(GsonConverterFactory.create());
+
 
     Retrofit retrofit = builder.client(httpClient.build()).build();
 
@@ -88,13 +94,16 @@ public class ProductImplementation {
         Log.d(TAG,returnValueList.toString());
     }
 
-    public boolean addToCart(Carts carts){
+    public boolean addToCart(Carts carts, String token){
+
 
         Interface_Product productClient = retrofit.create(Interface_Product.class);
-        String BearerToken = "Bearer " + Url.cookie;
+        String BearerToken = "Bearer " + token;
 //        String BearerToken=Url.cookie;
         Log.d(TAG, BearerToken);
+
         Call<MessageResponse> call = productClient.cartTheProduct(BearerToken,carts);
+       
         call.enqueue(new Callback<MessageResponse>() {
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
@@ -106,6 +115,8 @@ public class ProductImplementation {
                     MessageResponse messageResponse = response.body();
                     Log.d(TAG, "Successful  "+messageResponse.getMessage());
                     returnOfAddCart=true;
+                    Log.d(TAG, String.valueOf(returnOfAddCart));
+
                 }
             }
 

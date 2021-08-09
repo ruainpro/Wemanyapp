@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -31,6 +32,11 @@ public interface Interface_Product {
     @GET("/api/auth/user/getAllCartdata")
     Call<MessageResponse> getAllCartsInfoById(@Header("Authorization") String authHeader);
 
+    @DELETE("/api/auth/user/deleteCartdataById/{id}")
+    Call<MessageResponse> deleteCartdataById(@Header("Authorization") String authHeader,@Path("id") String id);
+
+
+
     @GET("/api/auth/user/getAllPurchasedProduct")
     Call<MessageResponse> getAllPurchasedProduct(@Header("Authorization") String authHeader);
 
@@ -38,7 +44,7 @@ public interface Interface_Product {
 //    @POST("/api/auth/User/purchaseProduct")s
 //    Call<MessageResponse> getpaymentWork(@Body Purchasing purchasing);
 
-    @POST("/api/auth/User/purchaseProduct")
-    Call<String> getpaymentWork(@Header("Authorization") String authHeader,@Body Purchasing purchasing);
+    @POST("/api/auth/user/purchaseProduct")
+    Call<MessageResponse> purchaseProduct(@Header("Authorization") String authHeader,@Body Purchasing purchasing);
 
 }

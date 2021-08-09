@@ -33,7 +33,7 @@ import com.dao.wethemany.services.Product_Services;
 import com.dao.wethemany.services.PurchasingProductServices;
 import com.stripe.model.Charge;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth/user/")
 public class UserController {

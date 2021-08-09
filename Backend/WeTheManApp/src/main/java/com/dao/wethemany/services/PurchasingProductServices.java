@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -40,14 +42,18 @@ public class PurchasingProductServices {
 		purchasing.setPurchasedDate(new Date());
 		
 		for(PurchasedProduct purchasedProduct:purchasing.getPurchasedproduct()) {
-
-		    Query query = new Query();
-		    query.addCriteria(Criteria.where("cartsStatus").is("False"));
-
-		    Carts cartsTest = mongoOperations.findOne(query, Carts.class);
-		    //modify and update with save()
-		    cartsTest.setId(purchasedProduct.getProductId());
-		    mongoOperations.save(cartsTest);
+	        
+			Query query6 = new Query();
+	        query6.addCriteria(Criteria.where("_id").is(purchasedProduct.getCartId()));	        
+	        Update update6 = new Update();
+	        update6.set("cartsStatus", "False");
+	        
+	        //FindAndModifyOptions().returnNew(true) = newly updated document
+	        //FindAndModifyOptions().returnNew(false) = old document (not update yet)
+	        mongoOperations.findAndModify(
+	                query6, update6, 
+	                new FindAndModifyOptions(), Carts.class);
+	        
 		}
 		
 		purchasingInfoRepository.save(purchasing);

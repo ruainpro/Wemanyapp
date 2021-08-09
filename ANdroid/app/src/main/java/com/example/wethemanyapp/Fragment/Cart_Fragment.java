@@ -1,15 +1,27 @@
 package com.example.wethemanyapp.Fragment;
 
+import static android.graphics.Color.GREEN;
+
+import static androidx.core.content.ContextCompat.*;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +36,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +47,7 @@ import com.example.wethemanyapp.Model.Carts;
 import com.example.wethemanyapp.Model.MessageResponse;
 import com.example.wethemanyapp.Model.PaymentInfo;
 import com.example.wethemanyapp.Model.Product;
+import com.example.wethemanyapp.Model.PurchasedProduct;
 import com.example.wethemanyapp.Model.Purchasing;
 import com.example.wethemanyapp.R;
 import com.example.wethemanyapp.Url;
@@ -55,6 +69,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -82,6 +97,7 @@ public class Cart_Fragment extends Fragment {
     private String paymentIntentClientSecret;
     private Stripe stripe;
 
+    public ArrayList<Carts> cartedOne=new ArrayList<Carts>();
 
 
     RecyclerView cartsRecycleView;
@@ -91,7 +107,6 @@ public class Cart_Fragment extends Fragment {
 
     OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
     Retrofit.Builder builder = new Retrofit.Builder().baseUrl(Url.URLone).addConverterFactory(GsonConverterFactory.create());
-
     Retrofit retrofit = builder.client(httpClient.build()).build();
 
     private static final String TAG = Cart_Fragment.class.getSimpleName();
@@ -102,6 +117,8 @@ public class Cart_Fragment extends Fragment {
 
     Dialog dialog;
 
+    String BEARER_TOKEN="";
+    ArrayList<Carts> filteredlist= new ArrayList<Carts>();
 
     public Cart_Fragment() {
         // Required empty public constructor
@@ -139,6 +156,9 @@ public class Cart_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView= inflater.inflate(R.layout.fragment_cart_, container, false);
+        SharedPreferences preferences = getActivity().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+        BEARER_TOKEN  = preferences.getString("BEARER_TOKEN",null);//second parameter default value..
+
         getAlCartData(rootView);
         cartsRecycleView = rootView.findViewById(R.id.recyclerview);
 
@@ -166,16 +186,14 @@ public class Cart_Fragment extends Fragment {
             Toast.makeText(getContext(), "Value AYo", Toast.LENGTH_SHORT).show();
         }
 
+        // This Button WIll appear a CheckOut Button
         Button continue_button=(Button) rootView.findViewById(R.id.continue_button);
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(getActivity(),"Just Passed");
                 startCheckout();
-                PaymentConfiguration.init(
-                        getContext(),
-                        "pk_test_51JKHBOAjTCM92WB7z0EwBG7JH1mOwKnwpvdQOojyKsDta1aloOLbWHgpx25bdq0vVsadt6uOzwibXi0WqUZUJa8p00JG3zlV9n"
-                );
+
             }
         });
 
@@ -185,7 +203,7 @@ public class Cart_Fragment extends Fragment {
 
     private void filter(String text) {
 
-        ArrayList<Carts> filteredlist= new ArrayList<Carts>();
+//        ArrayList<Carts> filteredlist= new ArrayList<Carts>();
         for (Carts item : cartsreturnValueList) {
             // checking if the entered string matched with any item of our recycler view.
             if (item.getCartedDate().toString().toLowerCase().contains(text.toLowerCase()) ||
@@ -213,7 +231,7 @@ public class Cart_Fragment extends Fragment {
     public void getAlCartData(View view) {
 
         Interface_Product productClient = retrofit.create(Interface_Product.class);
-        String BearerToken="Bearer "+ Url.cookie;
+        String BearerToken="Bearer "+BEARER_TOKEN;
 
         Call<MessageResponse> call = productClient.getAllCartsInfoById(BearerToken);
         call.enqueue(new Callback<MessageResponse>() {
@@ -224,11 +242,10 @@ public class Cart_Fragment extends Fragment {
                     Log.d(TAG,response.toString());
                 }
                 if (response.isSuccessful()) {
-                    Log.d(TAG,response.toString());
-
                     MessageResponse messageResponse=response.body();
-                    cartsreturnValueList= messageResponse.getCartsValueList();
-                    setRecentlyViewedRecycler(cartsreturnValueList);
+//                    cartsreturnValueList.addAll(messageResponse.getCartsValueList());
+//                    cartsreturnValueList= messageResponse.getCartsValueList();
+                    setRecentlyViewedRecycler(messageResponse.getCartsValueList());
                 }
             }
 
@@ -243,18 +260,14 @@ public class Cart_Fragment extends Fragment {
 
 
     private void setRecentlyViewedRecycler(ArrayList<Carts> recentlyViewedDataList) {
-//        ArrayList<Carts> productarray = new ArrayList<Carts>(recentlyViewedDataList);
 
-        Log.d(TAG,"=============================");
-        Log.d(TAG,recentlyViewedDataList.toString());
-        Log.d(TAG,"=============================");
+        cartsreturnValueList.addAll(recentlyViewedDataList);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),1);
         cartsRecycleView.setLayoutManager(layoutManager);
-        cartlistFrame_adapter = new CartList_Adapter(getContext(),recentlyViewedDataList,Cart_Fragment.this);
+        cartlistFrame_adapter = new CartList_Adapter(getContext(),cartsreturnValueList,Cart_Fragment.this);
         cartsRecycleView.setAdapter(cartlistFrame_adapter);
         cartlistFrame_adapter.notifyDataSetChanged();
     }
-
 
     public void showDialog(Activity activity, String msg){
         dialog = new Dialog(activity);
@@ -276,236 +289,154 @@ public class Cart_Fragment extends Fragment {
 
     }
 
-
-
 //  ----------------------------   Below This is a file relted to Payment ---------------------
 
-
-    private void startCheckout() {
-
-        TextView textview_price= (TextView)getActivity().findViewById(R.id.totalPriceCart);
-
-        Log.d(TAG,"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-//        Log.d(TAG,textview_price.getText().toString());
-        Log.d(TAG,"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-
-
-        Purchasing purchasing=new Purchasing();
-        purchasing.setUserEmail(Url.user);
-
-        PaymentInfo paymentInfo=new PaymentInfo();
-        paymentInfo.setPaymentInfo("pk_test_51JKHBOAjTCM92WB7z0EwBG7JH1mOwKnwpvdQOojyKsDta1aloOLbWHgpx25bdq0vVsadt6uOzwibXi0WqUZUJa8p00JG3zlV9n");
-        paymentInfo.setPaymentMedium("US");
-//        paymentInfo.setPayment_Amount(Double.valueOf(textview_price.getText().toString()));
-        paymentInfo.setPayment_Amount(1000);
-        purchasing.setPaymentInfo(paymentInfo);
-
-
-        boolean bool=false;
-        Interface_Product userClient = retrofit.create(Interface_Product.class);
-//        Call<JwtResponse> call = userClient.loginUser(user);
-        String BearerToken="Bearer "+ Url.cookie;
-
-        retrofit2.Call<String> call=userClient.getpaymentWork(BearerToken,purchasing);
-
-        call.enqueue(new retrofit2.Callback<String>() {
-            @Override
-            public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
-                new PayCallback(Cart_Fragment.this);
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<String> call, Throwable t) {
-
-            }
-        });
-
-
+    public void startCheckout() {
 
         // Hook up the pay button to the card widget and stripe instance
         Button payButton = dialog.findViewById(R.id.payButton);
         payButton.setOnClickListener((View view) -> {
-            Log.d(TAG,"123433333333333");
-
+            Log.d(TAG,"pay button clicked: ");
             CardInputWidget cardInputWidget = dialog.findViewById(R.id.cardInputWidget);
-            PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
-            if (params != null) {
-                ConfirmPaymentIntentParams confirmParams = ConfirmPaymentIntentParams
-                        .createWithPaymentMethodCreateParams(params, paymentIntentClientSecret);
-                stripe.confirmPayment(this, confirmParams);
-            }
+            TextView textview_price= (TextView)getActivity().findViewById(R.id.totalPriceCart);
+
+            // Creataing ana purchasedobject and initialaising data for further Use
+            Purchasing purchasing=new Purchasing();
+
+            //Retrieve token wherever necessary
+            SharedPreferences preferences = getActivity().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+            String UserEmail = preferences.getString("User_EMAIL",null);//second parameter default value.
+            purchasing.setUserEmail(UserEmail);
+
+            PaymentInfo paymentInfo=new PaymentInfo();
+            paymentInfo.setPaymentInfo("pk_test_51JKHBOAjTCM92WB7z0EwBG7JH1mOwKnwpvdQOojyKsDta1aloOLbWHgpx25bdq0vVsadt6uOzwibXi0WqUZUJa8p00JG3zlV9n");
+            paymentInfo.setPaymentMedium("US");
+        paymentInfo.setPayment_Amount(Double.valueOf(textview_price.getText().toString()));
+//            paymentInfo.setPayment_Amount(1000);
+            purchasing.setPaymentInfo(paymentInfo);
+            ArrayList<PurchasedProduct> purchasedProductsArraya =new ArrayList<PurchasedProduct>();
+           if( (! cartedOne.isEmpty()) || (cartedOne !=null)){
+               for(Carts carts:cartedOne){
+                   PurchasedProduct purchasedProduct=new PurchasedProduct();
+                   purchasedProduct.setProductId(carts.getProductid());
+                   purchasedProduct.setProductQuantity(carts.getQuantity());
+                   purchasedProduct.setCartId(carts.getId());
+                   purchasedProductsArraya.add(purchasedProduct);
+
+               }
+               purchasing.setPurchasedproduct(purchasedProductsArraya);
+               purchasedOne(purchasing);
+           }
+
+
         });
+
     }
 
-    private void displayAlert(@NonNull String title,
-                              @Nullable String message,
-                              boolean restartDemo) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                .setTitle(title)
-                .setMessage(message);
-        if (restartDemo) {
-            builder.setPositiveButton("Restart demo",
-                    (DialogInterface dialog, int index) -> {
-                        CardInputWidget cardInputWidget = getActivity().findViewById(R.id.cardInputWidget);
-                        cardInputWidget.clear();
-                        startCheckout();
-                    });
-        } else {
-            builder.setPositiveButton("Ok", null);
-        }
-        builder.create().show();
-    }
+    public void purchasedOne(Purchasing purchasing){
 
+        OkHttpClient.Builder httpClient2 = new OkHttpClient.Builder();
+        httpClient2.connectTimeout(10, TimeUnit.SECONDS);
+        httpClient2.readTimeout(20, TimeUnit.SECONDS);
+        httpClient2.writeTimeout(10, TimeUnit.SECONDS);
+        Retrofit.Builder builder2 = new Retrofit.Builder().baseUrl(Url.URLone).addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit2 = builder2.client(httpClient.build()).build();
 
+        boolean bool=false;
+        Interface_Product userClient = retrofit2.create(Interface_Product.class);
+        String BearerToken="Bearer "+ BEARER_TOKEN;
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        retrofit2.Call<MessageResponse> call=userClient.purchaseProduct(BearerToken,purchasing);
+        call.enqueue(new retrofit2.Callback<MessageResponse>() {
 
-        // Handle the result of stripe.confirmPayment
-        stripe.onPaymentResult(requestCode, data, new PaymentResultCallback(this));
-    }
+            @Override
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
 
-    private void onPaymentSuccess(@NonNull final Response response) throws IOException {
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
-        Map<String, String> responseMap = gson.fromJson(
-                Objects.requireNonNull(response.body()).toString(),
-                type
-        );
+                LinearLayout returnmessageHodler=getView().findViewById(R.id.returnmessageHodler);
+                returnmessageHodler.setVisibility(View.VISIBLE);
 
-        // The response from the server includes the Stripe publishable key and
-        // PaymentIntent details.
-        // For added security, our sample app gets the publishable key from the server
-        String stripePublishableKey = responseMap.get("pk_test_51JKHBOAjTCM92WB7z0EwBG7JH1mOwKnwpvdQOojyKsDta1aloOLbWHgpx25bdq0vVsadt6uOzwibXi0WqUZUJa8p00JG3zlV9n");
-        paymentIntentClientSecret = responseMap.get("sk_test_51JKHBOAjTCM92WB7EGezDMkWyFzs4mGxr5sIUemdVyBkpWZT6GIiHaTKKazE7j1kaWPqlGkiolYBeYcwbkR66xYM00g7mmMjoe");
+                if(response.isSuccessful()){
+                    if(response.body().getReturnStatus()==1) {
+                        Log.d(TAG,response.toString());
+                        dialog.cancel();
+                        afterTheREfresh("sucess");
+                    }
+                }else{
+                    dialog.cancel();
 
-        // Configure the SDK with your Stripe publishable key so that it can make requests to the Stripe API
-        stripe = new Stripe(
-                getContext(),
-                Objects.requireNonNull(stripePublishableKey)
-        );
-    }
-
-    private static final class PayCallback implements Callback {
-        @NonNull private final WeakReference<Cart_Fragment> activityRef;
-
-        PayCallback(@NonNull Cart_Fragment activity) {
-            activityRef = new WeakReference<>(activity);
-        }
-
-
-        @Override
-        public void onFailure(Call call, Throwable t) {
-            final Cart_Fragment activity = activityRef.get();
-            if (activity == null) {
-                return;
-            }
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                  Toast.makeText(activity.getContext(), "Error: " +"ss", Toast.LENGTH_LONG ).show();
                 }
 
-            });
-
-        }
-
-//        @Override
-//        public void onFailure(@NonNull Call call, @NonNull IOException e) {
-//
-//
-//            activity.runOnUiThread(() ->
-//                    Toast.makeText(
-//                            activity, "Error: " + e.toString(), Toast.LENGTH_LONG
-//                    ).show()
-//            );
-//        }
-
-
-
-        @Override
-        public void onResponse(@NonNull Call call, @NonNull final Response response) {
-            final Cart_Fragment activity = activityRef.get();
-            if (activity == null) {
-                return;
             }
 
-            if(!response.isSuccessful()){
+            @Override
+            public void onFailure(retrofit2.Call<MessageResponse> call, Throwable t) {
+                getAlCartData(getView());
+
+                LinearLayout returnmessageHodler=getView().findViewById(R.id.returnmessageHodler);
+                returnmessageHodler.setVisibility(View.VISIBLE);
+
+                TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
+                purchaseReturnMessage.setText("Failed To Buyed The product, Sorry");
+
+                TextView purchaseReturnsucesssorfaialure=getView().findViewById(R.id.purchaseReturnsucesssorfaialure);
+                purchaseReturnsucesssorfaialure.setText("Sorry");
+                purchaseReturnsucesssorfaialure.setTextColor(getResources().getColor(R.color.colorREd));
 
             }
 
-            if (!response.isSuccessful()) {
+        });
 
-//                Cart_Fragment.
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(activity.getContext(),"any mesage",Toast.LENGTH_LONG).show();
-                    }
-                });
-
-
-                new Thread(new Runnable() {                    @Override
-                    public void run() {
-                        Toast.makeText(activity.getContext(), "Error: " + response.toString(), Toast.LENGTH_LONG).show();
-                    }
-                });
-//                );
-            } else {
-                try {
-                    activity.onPaymentSuccess(response);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
-    private static final class PaymentResultCallback
-            implements ApiResultCallback<PaymentIntentResult> {
-        @NonNull private final WeakReference<Cart_Fragment> activityRef;
+    public void afterTheREfresh(String status){
+        dialog.cancel();
+        if(status.equals("sucess")){
+            getAlCartData(getView());
+           TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
+            purchaseReturnMessage.setText("Sucessfully Buyed The product, Check Email Receipt");
 
-        PaymentResultCallback(@NonNull Cart_Fragment activity) {
-            activityRef = new WeakReference<>(activity);
+            TextView purchaseReturnsucesssorfaialure=getView().findViewById(R.id.purchaseReturnsucesssorfaialure);
+            purchaseReturnsucesssorfaialure.setText("Sucess");
+            purchaseReturnsucesssorfaialure.setTextColor(getResources().getColor(R.color.teal_700));
+
         }
+        else{
+        TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
+        purchaseReturnMessage.setText("Failed To Buyed The product, Sorry");
 
-        @Override
-        public void onSuccess(@NonNull PaymentIntentResult result) {
-            final Cart_Fragment activity = activityRef.get();
-            if (activity == null) {
-                return;
-            }
-
-            PaymentIntent paymentIntent = result.getIntent();
-            PaymentIntent.Status status = paymentIntent.getStatus();
-            if (status == PaymentIntent.Status.Succeeded) {
-                // Payment completed successfully
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                activity.displayAlert(
-                        "Payment completed",
-                        gson.toJson(paymentIntent),
-                        true
-                );
-            } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
-                // Payment failed – allow retrying using a different payment method
-                activity.displayAlert(
-                        "Payment failed",
-                        Objects.requireNonNull(paymentIntent.getLastPaymentError()).getMessage(),
-                        false
-                );
-            }
-        }
-
-        @Override
-        public void onError(@NonNull Exception e) {
-            final Cart_Fragment activity = activityRef.get();
-            if (activity == null) {
-                return;
-            }
-
-            // Payment request failed – allow retrying using the same payment method
-            activity.displayAlert("Error", e.toString(), false);
-        }
+        TextView purchaseReturnsucesssorfaialure=getView().findViewById(R.id.purchaseReturnsucesssorfaialure);
+        purchaseReturnsucesssorfaialure.setText("Sorry");
+        purchaseReturnsucesssorfaialure.setTextColor(getResources().getColor(R.color.teal_700));
     }
+
+    }
+    public void displayTheTotalorSomething(){
+
+        Button continue_button=(Button) getView().findViewById(R.id.continue_button);
+
+        if(!cartedOne.isEmpty() || cartedOne!=null){
+            double totalCOst=0;
+            for(Carts cat:cartedOne){
+                double priceAmnt=cat.getQuantity()*cat.getProduct().getPrice();
+                totalCOst=totalCOst+priceAmnt;
+            }
+            TextView totalPriceCart= getView().findViewById(R.id.totalPriceCart);
+            totalPriceCart.setText(String.valueOf(totalCOst));
+
+            TextView totalaCountOfProduct= getView().findViewById(R.id.totalaPricecountCarts);
+            totalaCountOfProduct.setText("Total Price (" +cartedOne.size()+ " items)");
+            continue_button.setVisibility(View.VISIBLE);
+        }
+
+        if(cartedOne.size()==0){
+            Log.d(TAG," 1 ===  "+cartedOne.size());
+            continue_button.setVisibility(View.GONE);
+        }
+
+    }
+
+
+
+
+
 }

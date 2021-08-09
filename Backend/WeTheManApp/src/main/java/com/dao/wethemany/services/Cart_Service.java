@@ -83,7 +83,7 @@ public class Cart_Service {
 		if((carts !=null) && (! carts.getProductid().isEmpty())) {
 			carts.setCartedDate(new Date());
 			carts.setCartedBy(email);
-			carts.setCartedBy("True");
+			carts.setCartsStatus("True");
 			carts_Repository.save(carts);
 			messageResponse.setHttpStatus(HttpStatus.OK);
 			messageResponse.setMessage("Sucessfully Added To Cart");

@@ -1,18 +1,28 @@
 package com.example.wethemanyapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.FragmentManager;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -30,6 +40,7 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -40,9 +51,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Product_Detail extends AppCompatActivity {
 
-    OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-    Retrofit.Builder builder = new Retrofit.Builder().baseUrl(Url.URLone).addConverterFactory(GsonConverterFactory.create());
 
+    OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+
+    Retrofit.Builder builder = new Retrofit.Builder().baseUrl(Url.URLone).addConverterFactory(GsonConverterFactory.create());
     Retrofit retrofit = builder.client(httpClient.build()).build();
 
     private static final String TAG = Product_Detail.class.getSimpleName();
@@ -52,6 +65,9 @@ public class Product_Detail extends AppCompatActivity {
     int quantityOne=1;
 
     ProductImplementation productImplementation=new ProductImplementation();
+    boolean returnStatus;
+    Dialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +78,19 @@ public class Product_Detail extends AppCompatActivity {
         imageView_Backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Fragment fragment = new HomeFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.mainframe, fragment).commit();
+//                getSupportFragmentManager().beginTransaction().add(R.id.mainframe,new Product_Fragment()).commit();
 
             }
         });
 
-
-
         Intent intent = getIntent();
         product_Id = intent.getStringExtra("product_Id");
         doRendenderandOtherAction(product_Id);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+        String BEARER_TOKEN  = preferences.getString("BEARER_TOKEN",null);//second parameter default value.
 
         Button button2AddtoCart=findViewById(R.id.button2);
         button2AddtoCart.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +100,8 @@ public class Product_Detail extends AppCompatActivity {
                 carts.setProductid(product_Id);
                 carts.setQuantity(quantityOne);
 
-                boolean returnBoolean=productImplementation.addToCart(carts);
+                addToCart(carts,BEARER_TOKEN);
+
             }
         });
 
@@ -89,8 +109,10 @@ public class Product_Detail extends AppCompatActivity {
 
     public void doRendenderandOtherAction(String product_Id){
 
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+        String BEARER_TOKEN  = preferences.getString("BEARER_TOKEN",null);//second parameter default value.
         Interface_Product productClient = retrofit.create(Interface_Product.class);
-        String BearerToken="Bearer "+ Url.cookie;
+        String BearerToken="Bearer "+ BEARER_TOKEN;
 //        String BearerToken=Url.cookie;
         Log.d(TAG,BearerToken);
         Call<MessageResponse> call = productClient.getALlProductById(BearerToken,product_Id);
@@ -171,4 +193,74 @@ public class Product_Detail extends AppCompatActivity {
             }
         });
     }
+
+    // Add To  Cart Function
+
+    public boolean addToCart(Carts carts, String token){
+
+
+        Interface_Product productClient = retrofit.create(Interface_Product.class);
+        String BearerToken = "Bearer " + token;
+//        String BearerToken=Url.cookie;
+        Log.d(TAG, BearerToken);
+
+        Call<MessageResponse> call = productClient.cartTheProduct(BearerToken,carts);
+
+        call.enqueue(new Callback<MessageResponse>() {
+            @Override
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.d(TAG,response.toString());
+                    Log.d(TAG, "Not Sucessfull");
+                }
+                if (response.isSuccessful()) {
+                    MessageResponse messageResponse = response.body();
+                    Log.d(TAG, "Successful  "+messageResponse.getMessage());
+
+                    returnStatus=true;
+                    showDialog();
+
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
+            }
+
+
+        });
+
+        return returnStatus;
+    }
+
+    public void showDialog(){
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this).setTitle("Sucessfull").
+                setMessage("Sucessfully Added To Cart");
+
+        final AlertDialog alert = dialog.create();
+        alert.show();
+
+// Hide after some seconds
+        final Handler handler  = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (alert.isShowing()) {
+                    alert.dismiss();
+                }
+            }
+        };
+
+        alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handler.removeCallbacks(runnable);
+            }
+        });
+
+        handler.postDelayed(runnable, 2000);
+
+    }
+
 }

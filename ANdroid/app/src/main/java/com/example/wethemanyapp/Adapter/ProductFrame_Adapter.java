@@ -3,6 +3,7 @@ package com.example.wethemanyapp.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.example.wethemanyapp.Fragment.Product_Fragment;
 import com.example.wethemanyapp.Model.Product;
 import com.example.wethemanyapp.Product_Detail;
 import com.example.wethemanyapp.R;
@@ -33,20 +35,16 @@ public class ProductFrame_Adapter extends RecyclerView.Adapter<ProductFrame_Adap
 
     Context context;
     ArrayList<Product> product= new ArrayList<>();
-//    ArrayList<Product> productCOpy= new ArrayList<>();
     ArrayList<Product> original= new ArrayList<>();
     private static final String TAG = ProductFrame_Adapter.class.getSimpleName();
     RequestManager glide;
+    Product_Fragment product_fragment;
 
-//    private List<Product> productListFiltered;
-
-
-
-    public ProductFrame_Adapter(Context context, ArrayList<Product> product,ArrayList<Product> original) {
+    public ProductFrame_Adapter(Context context, ArrayList<Product> product, Product_Fragment product_fragment) {
         this.context = context;
         this.product = product;
-        this.original = original;
-        glide = Glide.with(context);
+        glide = Glide.with(context.getApplicationContext());
+        this.product_fragment=product_fragment;
 
     }
 
@@ -55,7 +53,6 @@ public class ProductFrame_Adapter extends RecyclerView.Adapter<ProductFrame_Adap
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.product_items, parent, false);
-
         return new ProductViewHolder(view);
     }
 
@@ -64,35 +61,26 @@ public class ProductFrame_Adapter extends RecyclerView.Adapter<ProductFrame_Adap
 
         final Product ostbindit = product.get(position);
 
-//        holder.categoryImage.setImageResource(product.get(position).getImageurl());
         holder.productName.setText(product.get(position).getName());
         holder.productCost.setText(String.valueOf(product.get(position).getPrice()));
-
         if(ostbindit.getImages() !=null){
             String imageUrl= Url.URLone+"api/auth/getImages/"+ostbindit.getImages();
             glide.load(imageUrl).into(holder.productImage);
-
-
         }
-
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, Product_Detail.class);
                 intent.putExtra("product_Id",product.get(position).getId());
-//                intent.putExtra("cookie",cookie);
+                intent.putExtra("cookie","cookie");
 
+                if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M || Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
                 context.startActivity(intent);
             }
         });
-
-    }
-
-    @Override
-    public int getItemCount() {
-//        System.out.println(product.toString());
-        return product.size();
     }
 
     // method for filtering our recyclerview items.
@@ -105,7 +93,11 @@ public class ProductFrame_Adapter extends RecyclerView.Adapter<ProductFrame_Adap
         notifyDataSetChanged();
     }
 
-
+    @Override
+    public int getItemCount() {
+//        System.out.println(product.toString());
+        return product.size();
+    }
 
     public  static class ProductViewHolder extends RecyclerView.ViewHolder{
 
@@ -124,4 +116,6 @@ public class ProductFrame_Adapter extends RecyclerView.Adapter<ProductFrame_Adap
 
         }
     }
+
+
 }

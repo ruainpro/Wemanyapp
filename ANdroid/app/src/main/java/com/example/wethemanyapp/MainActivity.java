@@ -41,18 +41,17 @@ import java.util.Set;
                 int position = tab.getPosition();
                 switch(position) {
                     case 0:
-//                        registerLayout.setVisibility(View.);
                         loginLayout.setVisibility(View.VISIBLE);
                         registerLayout.setVisibility(View.GONE);
                         // code block
                         break;
-                    case 1:
 
+                    case 1:
                         loginLayout.setVisibility(View.GONE);
                         registerLayout.setVisibility(View.VISIBLE);
-
                         // code block
                         break;
+
                     default:
                         loginLayout.setVisibility(View.VISIBLE);
                         registerLayout.setVisibility(View.GONE);
@@ -65,8 +64,6 @@ import java.util.Set;
             public void onTabUnselected(TabLayout.Tab tab) {
                 LinearLayout loginLayout =findViewById(R.id.loginLayout);
                 loginLayout.setVisibility(View.VISIBLE);
-
-
             }
 
             @Override
@@ -82,7 +79,7 @@ import java.util.Set;
         EditText ediText_register_password= (EditText) findViewById(R.id.ediText_register_password);
         EditText ediText_register_confirmpassword= (EditText) findViewById(R.id.ediText_register_confirmpassword);
 
-        // Login Button Action
+        // Login Button Action on Clicking login button it will render it to here
         loginBtn.setOnClickListener(new View.OnClickListener() {
 //            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -100,12 +97,9 @@ import java.util.Set;
                     Toast.makeText(MainActivity.this, "Enter Email and Password Please", Toast.LENGTH_SHORT).show();
                     return;
                 }else{
-
                     User user=new User();
                     user.setEmail(ediText_login_emailText);
                     user.setPassword(ediText_login_passwordText);
-
-                    Toast.makeText(MainActivity.this, user.toString(), Toast.LENGTH_SHORT).show();
                     usersImplenttt.getLoginCHeck(user);
 
 
@@ -113,7 +107,7 @@ import java.util.Set;
             }
         });
 
-        // SignUp Button Action
+        // SignUp Button Action on CLicking Signup Button it will render to this Function
         signBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -2,6 +2,7 @@ package com.dao.wethemany.controllers;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -9,20 +10,33 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,7 +70,7 @@ import com.dao.wethemany.services.Others_Services;
 
 
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 8000)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -84,6 +98,12 @@ public class AuthController {
 	@Autowired
 	Others_Services others_Services;
 	
+//    @Autowired
+//    private JavaMailSender emailSender;
+	
+	@Value("${spring.mail.username}")
+	private String companyEmail;
+	
 	
 
     @RequestMapping(value = "/getImages/{Images}", method = RequestMethod.GET,
@@ -97,6 +117,20 @@ public class AuthController {
 
     }
 	
+    @RequestMapping(path = "/download/{Images}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> download(@PathVariable(name = "Images") String Images) throws IOException {
+
+        // ...
+		File file =new File("user-photos/"+Images);
+
+        Path path = Paths.get(file.getAbsolutePath());
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+        return ResponseEntity.ok()
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+    }
 
 
 
@@ -195,8 +229,17 @@ public class AuthController {
 	@PostMapping("/calculateTheCo02/{productvalue}")
 	public ResponseEntity<?>  calculateTheCo02(@PathVariable(name = "productvalue") double productvalue) {
 
-		
+	
 		return ResponseEntity.ok(others_Services.calculateC02Emission(productvalue));
+
+	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<?>  logout(@RequestBody Purchasing purchasisng) {
+		
+//		jwtUtils.v
+
+		return ResponseEntity.ok(payment_Services.createCharge(purchasisng));
 	}
 	
 

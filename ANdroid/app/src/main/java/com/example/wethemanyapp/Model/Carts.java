@@ -16,6 +16,29 @@ public class Carts {
 
 	private int quantity;
 
+	private boolean itemcartedOrNotAdapter;
+
+	@Override
+	public String toString() {
+		return "Carts{" +
+				"id='" + id + '\'' +
+				", productid='" + productid + '\'' +
+				", cartedDate=" + cartedDate +
+				", product=" + product +
+				", cartedBy='" + cartedBy + '\'' +
+				", quantity=" + quantity +
+				", itemcartedOrNotAdapter=" + itemcartedOrNotAdapter +
+				'}';
+	}
+
+	public boolean isItemcartedOrNotAdapter() {
+		return itemcartedOrNotAdapter;
+	}
+
+	public void setItemcartedOrNotAdapter(boolean itemcartedOrNotAdapter) {
+		this.itemcartedOrNotAdapter = itemcartedOrNotAdapter;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -64,13 +87,5 @@ public class Carts {
 		this.quantity = quantity;
 	}
 
-	@Override
-	public String toString() {
-		return "Carts [id=" + id + ", productid=" + productid + ", cartedDate=" + cartedDate + ", product=" + product
-				+ ", cartedBy=" + cartedBy + ", quantity=" + quantity + "]";
-	}
-	
-	
-	
 
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_icons8_home"
+
+            android:title="@string/HomeTileText" />
+        <item
+            android:id="@+id/nav_Product"
+            android:icon="@drawable/ic_open_box"
+            android:title="@string/ProductTileText" />
+        <item
+            android:id="@+id/nav_Cart"
+            android:icon="@drawable/ic_cart_black"
+            android:title="@string/CartTileText" />
+        <item
+            android:id="@+id/nav_Account"
+            android:icon="@drawable/ic_user"
+            android:title="@string/AccountTileText" />
+    </group>
+
+<!--    <item android:title="Communicate">-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/nav_share"-->
+<!--                android:icon="@drawable/ic_menu_share"-->
+<!--                android:title="@string/menu_share" />-->
+<!--            <item-->
+<!--                android:id="@+id/nav_logout"-->
+<!--                android:icon="@drawable/ic_menu_send"-->
+<!--                android:title="@string/menu_logmeout" />-->
+<!--        </menu>-->
+<!--    </item>-->
+
+</menu>

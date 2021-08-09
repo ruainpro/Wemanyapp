@@ -10,13 +10,24 @@ public class PurchasedProduct {
 	private String productId;
 	
 	private double productQuantity;
+	
+	private String cartId;
+	
+
+	public String getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(String cartId) {
+		this.cartId = cartId;
+	}
 
 	Product productresponse;
 
 	@Override
 	public String toString() {
-		return "PurchasedProduct [productId=" + productId + ", productQuantity=" + productQuantity
-				+ ", productresponse=" + productresponse + "]";
+		return "PurchasedProduct [productId=" + productId + ", productQuantity=" + productQuantity + ", cartId="
+				+ cartId + ", productresponse=" + productresponse + "]";
 	}
 
 	public String getProductId() {

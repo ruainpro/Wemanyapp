@@ -24,4 +24,15 @@
     Our climate mission is to intentionally impact climate change by investing at least 50% of
         profits into carbon reduction projects.
     </string>
+
+    <string name="HomeTileText">Home </string>
+    <string name="ProductTileText">Product </string>
+    <string name="CartTileText">Cart </string>
+    <string name="AccountTileText">Account </string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_title">Android Studio</string>
 </resources>
