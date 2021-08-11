@@ -189,7 +189,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://localhost:8080/api/auth/getImages/C02Calcuation.pdf"));
+                        Uri.parse("https://drive.google.com/file/d/1F5FAtPOdf17Pj2koLdoHcYq0587L4EvP/view"));
                 startActivity(browserIntent);
 
             }

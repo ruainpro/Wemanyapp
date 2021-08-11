@@ -56,9 +56,9 @@ public class Cart_Service {
 		
 		MessageResponse messageResponse= new MessageResponse();
 		
-		boolean returnStatus=carts_Repository.findByIdAndCartedBy(id,email);
+		Carts returnStatus=carts_Repository.findByIdAndCartedBy(id,email);
 		
-		if(returnStatus==true) {
+		if(returnStatus !=null) {
 		
 			
 			carts_Repository.deleteByIdAndCartedBy(id,email);

@@ -63,6 +63,8 @@ import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
 
+import org.apache.http.conn.ConnectTimeoutException;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
@@ -159,7 +161,7 @@ public class Cart_Fragment extends Fragment {
         SharedPreferences preferences = getActivity().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
         BEARER_TOKEN  = preferences.getString("BEARER_TOKEN",null);//second parameter default value..
 
-        getAlCartData(rootView);
+        getAlCartData();
         cartsRecycleView = rootView.findViewById(R.id.recyclerview);
 
         EditText earachTxt=rootView.findViewById(R.id.search_fragmentcartlist);
@@ -168,14 +170,12 @@ public class Cart_Fragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!(String.valueOf(s).isEmpty())){
                     filter(s.toString());
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -193,10 +193,8 @@ public class Cart_Fragment extends Fragment {
             public void onClick(View v) {
                 showDialog(getActivity(),"Just Passed");
                 startCheckout();
-
             }
         });
-
 
         return rootView;
     }
@@ -226,9 +224,7 @@ public class Cart_Fragment extends Fragment {
         }
     }
 
-
-
-    public void getAlCartData(View view) {
+    public void getAlCartData() {
 
         Interface_Product productClient = retrofit.create(Interface_Product.class);
         String BearerToken="Bearer "+BEARER_TOKEN;
@@ -238,7 +234,7 @@ public class Cart_Fragment extends Fragment {
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (!response.isSuccessful()) {
-                    Log.d(TAG,"isSuccessful");
+                    Log.d(TAG,"getAlCartData :  isSuccessful");
                     Log.d(TAG,response.toString());
                 }
                 if (response.isSuccessful()) {
@@ -254,10 +250,7 @@ public class Cart_Fragment extends Fragment {
             }
 
         });
-
-
     }
-
 
     private void setRecentlyViewedRecycler(ArrayList<Carts> recentlyViewedDataList) {
 
@@ -333,12 +326,13 @@ public class Cart_Fragment extends Fragment {
 
     }
 
-    public void purchasedOne(Purchasing purchasing){
+    public void purchasedOne(Purchasing purchasing) {
+
 
         OkHttpClient.Builder httpClient2 = new OkHttpClient.Builder();
-        httpClient2.connectTimeout(10, TimeUnit.SECONDS);
-        httpClient2.readTimeout(20, TimeUnit.SECONDS);
-        httpClient2.writeTimeout(10, TimeUnit.SECONDS);
+        httpClient2.connectTimeout(60, TimeUnit.SECONDS);
+        httpClient2.readTimeout(60, TimeUnit.SECONDS);
+        httpClient2.writeTimeout(60, TimeUnit.SECONDS);
         Retrofit.Builder builder2 = new Retrofit.Builder().baseUrl(Url.URLone).addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit2 = builder2.client(httpClient.build()).build();
 
@@ -348,50 +342,52 @@ public class Cart_Fragment extends Fragment {
 
         retrofit2.Call<MessageResponse> call=userClient.purchaseProduct(BearerToken,purchasing);
         call.enqueue(new retrofit2.Callback<MessageResponse>() {
-
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
 
-                LinearLayout returnmessageHodler=getView().findViewById(R.id.returnmessageHodler);
-                returnmessageHodler.setVisibility(View.VISIBLE);
 
                 if(response.isSuccessful()){
-                    if(response.body().getReturnStatus()==1) {
-                        Log.d(TAG,response.toString());
-                        dialog.cancel();
-                        afterTheREfresh("sucess");
-                    }
-                }else{
                     dialog.cancel();
+                    Log.d(TAG,"response.isSuccessful()");
+                    cartsreturnValueList.clear();
+                    cartedOne.clear();
+                    getAlCartData();
 
+                    LinearLayout returnmessageHodler=getView().findViewById(R.id.returnmessageHodler);
+                    returnmessageHodler.setVisibility(View.VISIBLE);
+                    TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
+                    purchaseReturnMessage.setText("Sucessfully Buyed The product, Check Email Receipt");
+
+                    TextView purchaseReturnsucesssorfaialure=getView().findViewById(R.id.purchaseReturnsucesssorfaialure);
+                    purchaseReturnsucesssorfaialure.setText("Sucess");
+                    purchaseReturnsucesssorfaialure.setTextColor(getResources().getColor(R.color.teal_700));
+
+
+//                    if(response.body().getReturnStatus()==1) {
+//                        Log.d(TAG,response.toString());
+//                        dialog.cancel();
+////                        afterTheREfresh("sucess");
+//                    }
+                }else{
+                    Log.d(TAG,"response.is  NOT Successful()");
+                    dialog.cancel();
                 }
-
+                dialog.cancel();
             }
 
             @Override
             public void onFailure(retrofit2.Call<MessageResponse> call, Throwable t) {
-                getAlCartData(getView());
-
-                LinearLayout returnmessageHodler=getView().findViewById(R.id.returnmessageHodler);
-                returnmessageHodler.setVisibility(View.VISIBLE);
-
-                TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
-                purchaseReturnMessage.setText("Failed To Buyed The product, Sorry");
-
-                TextView purchaseReturnsucesssorfaialure=getView().findViewById(R.id.purchaseReturnsucesssorfaialure);
-                purchaseReturnsucesssorfaialure.setText("Sorry");
-                purchaseReturnsucesssorfaialure.setTextColor(getResources().getColor(R.color.colorREd));
-
+                dialog.cancel();
+                Log.d(TAG,"     Throwable t  "+t.toString());
             }
-
         });
-
     }
 
     public void afterTheREfresh(String status){
         dialog.cancel();
         if(status.equals("sucess")){
-            getAlCartData(getView());
+//            getAlCartData(getView());
+//            returnmessageHodler
            TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
             purchaseReturnMessage.setText("Sucessfully Buyed The product, Check Email Receipt");
 
@@ -436,7 +432,70 @@ public class Cart_Fragment extends Fragment {
     }
 
 
+    // Deleting an Cart Item
+    public void deleteCartItem(String id){
 
+        SharedPreferences preferences = getContext().getApplicationContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+        String BEARER_TOKEN  = preferences.getString("BEARER_TOKEN",null);//second parameter default value.
+
+        Interface_Product productClient = retrofit.create(Interface_Product.class);
+        String BearerToken="Bearer "+ BEARER_TOKEN;
+        Log.d(TAG,BearerToken);
+        Call<MessageResponse> call = productClient.deleteCartdataById(BearerToken,id);
+        call.enqueue(new Callback<MessageResponse>() {
+            @Override
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+
+                if(response.body().getReturnStatus()==1){
+                    Toast.makeText(getContext(),"Sucessfully Deleted",Toast.LENGTH_SHORT);
+                    cartsreturnValueList.clear();
+                    cartedOne.clear();
+                    getAlCartData();
+
+                    showDialog("Sucessfull", "Sucessfully Deleted");
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
+                Log.d(TAG," onFailure ");
+            }
+        });
+
+    }
+
+
+
+    public void showDialog(String title, String Message){
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext()).setTitle(title).
+                setMessage(Message);
+
+        final AlertDialog alert = dialog.create();
+        alert.show();
+
+// Hide after some seconds
+        final Handler handler  = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (alert.isShowing()) {
+                    alert.dismiss();
+                }
+            }
+        };
+
+        alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handler.removeCallbacks(runnable);
+            }
+        });
+
+        handler.postDelayed(runnable, 2000);
+
+    }
 
 
 }

@@ -113,8 +113,7 @@ public class CartList_Adapter extends RecyclerView.Adapter<CartList_Adapter.Cart
         holder.Image_DeleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                deleteImem(ostbindit.getId());
+                cart_Fragment.deleteCartItem(ostbindit.getId());
                 notifyDataSetChanged();
             }
         });
@@ -162,30 +161,6 @@ public class CartList_Adapter extends RecyclerView.Adapter<CartList_Adapter.Cart
         }
     }
 
-    public void deleteImem(String id){
 
-        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
-        String BEARER_TOKEN  = preferences.getString("BEARER_TOKEN",null);//second parameter default value.
-
-        Interface_Product productClient = retrofit.create(Interface_Product.class);
-        String BearerToken="Bearer "+ BEARER_TOKEN;
-        Log.d(TAG,BearerToken);
-        Call<MessageResponse> call = productClient.deleteCartdataById(BearerToken,id);
-        call.enqueue(new Callback<MessageResponse>() {
-            @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-
-                if(response.body().getReturnStatus()==1){
-                    Toast.makeText(context,"Sucessfully Deleted",Toast.LENGTH_SHORT);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
-            Log.d(TAG," onFailure ");
-            }
-        });
-
-    }
 
 }

@@ -116,6 +116,8 @@ public class Activity_Fragment_JoinMaian extends AppCompatActivity {
     private void setFragment(Fragment fragment) {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.detach(fragment);
+        fragmentTransaction.attach(fragment);
         fragmentTransaction.replace(R.id.mainframe, fragment);
         fragmentTransaction.commit();
     }

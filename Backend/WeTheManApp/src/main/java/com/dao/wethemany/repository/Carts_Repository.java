@@ -13,12 +13,11 @@ public interface Carts_Repository extends MongoRepository<Carts, String>{
 
 	List<Carts> findByCartedBy(String email);
 
-	boolean findByIdAndCartedBy(String id, String email);
+	Carts findByIdAndCartedBy(String id, String email);
 
 	void deleteByIdAndCartedBy(String id, String email);
 
-	List<Carts> findByCartedByAndCartsStatus(String email, String string);
-	
+	List<Carts> findByCartedByAndCartsStatus(String email, String string);	
 	
 
 }
