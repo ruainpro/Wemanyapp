@@ -81,6 +81,16 @@ public class Historyproduct_adapter extends RecyclerView.Adapter<Historyproduct_
 
     }
 
+    // method for filtering our recyclerview items.
+    public void filterList(ArrayList<Purchasing> filterllist) {
+        // below line is to add our filtered
+        // list in our course array list.
+        purchasing = filterllist;
+        // below line is to notify our adapter
+        // as change in recycler view data.
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return purchasing.size();

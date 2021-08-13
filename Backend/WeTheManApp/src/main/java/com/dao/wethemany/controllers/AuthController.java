@@ -143,7 +143,11 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getId(), 
 												 userDetails.getEmail(), 
-												 roles));
+												 roles,
+												 userDetails.getFullName(),
+												 userDetails.getCurrentAddress()
+												 
+				));
 	}
 	
 
@@ -167,9 +171,15 @@ public class AuthController {
 		}
 
 		// Create new user's account
-		User user = new User( 
-							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+//		User user = new User( 
+//							 signUpRequest.getEmail(),
+//							 encoder.encode(signUpRequest.getPassword()));
+		
+		User user =new User();
+		user.setEmail(signUpRequest.getEmail());
+		user.setPassword(encoder.encode(signUpRequest.getPassword()));
+		user.setFullName(signUpRequest.getFullName());
+		user.setCurrentAddress(signUpRequest.getCurrentAddress());
 
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();

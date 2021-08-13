@@ -80,9 +80,10 @@
                 android:fontFamily="@font/rubik"
                 android:lineSpacingExtra="3dp"
                 android:padding="10dp"
+                android:paddingBottom="10dp"
+
+
                 android:text="@string/appmotto"
-
-
                 android:textColor="#ffffff"
                 android:textSize="15sp" />
 
@@ -93,12 +94,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="320dp"
+            android:layout_marginBottom="17dp"
+            android:paddingBottom="5dp"
             android:text="What We Do Involve In"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/whatmedilinear"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,7 +114,7 @@
             android:layout_width="411dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
-            android:layout_marginTop="230dp"
+            android:layout_marginTop="255dp"
             android:orientation="horizontal"
             android:padding="5dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -130,12 +134,12 @@
                     android:paddingBottom="5dp"
                     android:text="Environment Issue"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="110dp"
+                    android:layout_width="100dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:src="@drawable/fullencrinment" />
@@ -158,12 +162,12 @@
                     android:paddingBottom="5dp"
                     android:text="Food Issue"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="110dp"
+                    android:layout_width="100dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:contentDescription="TODO"
@@ -189,7 +193,7 @@
                     android:paddingBottom="5dp"
                     android:text="Health Issue"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -209,10 +213,12 @@
             android:id="@+id/textView16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="11dp"
             android:layout_marginEnd="243dp"
             android:layout_weight="1"
+            android:gravity="left"
+            android:paddingLeft="10dp"
             android:text="We are Availabale On"
             android:textColor="@color/black"
             android:textSize="16sp"

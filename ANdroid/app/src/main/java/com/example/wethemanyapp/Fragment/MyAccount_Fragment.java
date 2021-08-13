@@ -10,17 +10,22 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wethemanyapp.Adapter.Historyproduct_adapter;
 import com.example.wethemanyapp.Adapter.ProductFrame_Adapter;
 import com.example.wethemanyapp.Interface.Interface_Product;
 import com.example.wethemanyapp.MainActivity;
+import com.example.wethemanyapp.Model.Carts;
 import com.example.wethemanyapp.Model.MessageResponse;
 import com.example.wethemanyapp.Model.Product;
 import com.example.wethemanyapp.Model.Purchasing;
@@ -58,6 +63,8 @@ public class MyAccount_Fragment extends Fragment {
 
     Historyproduct_adapter purchasingproductFrame_adapter;
     ArrayList<Purchasing> purchasingreturnValueList= new ArrayList<Purchasing>();
+    ArrayList<Purchasing> filteredlist= new ArrayList<Purchasing>();
+
 
 //    OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 //
@@ -134,24 +141,75 @@ public class MyAccount_Fragment extends Fragment {
                 SharedPreferences preferences = getContext().getSharedPreferences("MY_APP",Context.MODE_PRIVATE);
                 if(! preferences.getString("firstVisit",null).isEmpty() ||
                         preferences.getString("firstVisit",null) !=null){
-                }else{
-                    preferences.edit().putString("firstVisit","true").apply();
-                    String url = "https://docs.google.com/forms/d/e/1FAIpQLSfK-RobkOJmxP8VZ2BBXJ9dnUWKTN8wRUnQuZwAwAn380kS5g/viewform?vc=0&c=0&w=1&flr=0";
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
                 }
-
                 SharedPreferences settings = getContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
                 settings.edit().remove("BEARER_TOKEN").commit();
                 settings.edit().remove("User_EMAIL").commit();
+                settings.edit().remove("User_Name").commit();
+                settings.edit().remove("User_Address").commit();
 
                 Intent intent = new Intent(getContext().getApplicationContext(), MainActivity.class);
                 getContext().getApplicationContext().startActivity(intent);
             }
         });
 
+        ImageView imge_opengoogleform=rootView.findViewById(R.id.imageView14);
+        imge_opengoogleform.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLSfK-RobkOJmxP8VZ2BBXJ9dnUWKTN8wRUnQuZwAwAn380kS5g/viewform?vc=0&c=0&w=1&flr=0"));
+                startActivity(browserIntent);
+            }
+        });
+
+        EditText earachTxt=rootView.findViewById(R.id.search_fragmentSeeting);
+        earachTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter(s.toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         return rootView;
+    }
+
+    private void filter(String text) {
+
+//        ArrayList<Carts> filteredlist= new ArrayList<Carts>();
+
+            for (Purchasing item : purchasingreturnValueList) {
+                // checking if the entered string matched with any item of our recycler view.
+                if (item.getPurchasedDate().toString().toLowerCase().contains(text.toLowerCase())) {
+                    // if the item is matched we are
+                    // adding it to our filtered list.
+                    filteredlist.add(item);
+
+                }
+            }
+
+
+        if (filteredlist.isEmpty()) {
+            // if no item is added in filtered list we are
+            // displaying a toast message as no data found.
+            Log.d(TAG,"No Data Found");
+        } else {
+            // at last we are passing that filtered
+            // list to our adapter class.
+            purchasingproductFrame_adapter.filterList(filteredlist);
+        }
     }
 
 

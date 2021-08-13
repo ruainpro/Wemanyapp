@@ -13,13 +13,13 @@ public class Url {
     public static String cookie = "";
     public static String user = "";
     public static String uid = "";
-    public static String URLone="http://10.0.2.2:8080/";
+    public static String URLone="https://wemanyappru.herokuapp.com/";
 
     public static Interface_Users getEndPoints() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8080/")
-                          .baseUrl("http://192.168.188.51:8080/")
+                    .baseUrl("https://wemanyappru.herokuapp.com/")
+//                          .baseUrl("http://192.168.188.51:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

@@ -5,6 +5,11 @@
     <string name="label_loginbutton">Login</string>
     <string name="label_signupbutton">Signup</string>
 
+    <string name="hint_regitername">FullName</string>
+    <string name="hint_regiterlastname">LastName</string>
+    <string name="hint_regiterAddress">Current Address</string>
+
+
     <string name="login_email_hint">Email</string>
     <string name="login_password_hint">Password</string>
     <string name="hint_confirmpassword">Password</string>

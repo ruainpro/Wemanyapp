@@ -27,7 +27,31 @@ public class User {
   @Size(max = 120)
   private String password;
 
-  @DBRef
+  @NotBlank
+  private String fullName;
+  
+  @NotBlank
+  private String currentAddress;
+  
+  
+  
+  public String getFullName() {
+	return fullName;
+}
+
+public void setFullName(String fullName) {
+	this.fullName = fullName;
+}
+
+public String getCurrentAddress() {
+	return currentAddress;
+}
+
+public void setCurrentAddress(String currentAddress) {
+	this.currentAddress = currentAddress;
+}
+
+@DBRef
   private Set<Role> roles = new HashSet<>();
 
   public User() {
@@ -40,7 +64,8 @@ public class User {
 
   @Override
 public String toString() {
-	return "User [id=" + id + ", email=" + email + ", password=" + password + ", roles=" + roles + "]";
+	return "User [id=" + id + ", email=" + email + ", password=" + password + ", fullName=" + fullName
+			+ ", currentAddress=" + currentAddress + ", roles=" + roles + "]";
 }
 
 public String getId() {

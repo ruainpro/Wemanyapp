@@ -1,30 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    tools:showIn="@layout/customcheckout">
+    android:padding="5dp">
+    <!--    tools:showIn="@layout/customcheckout"-->
+
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        app:srcCompat="@android:drawable/ic_delete" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp"
+        android:text="Dear Sir, The Detail Regarding the user, address along with the Payment detail will be soley responsible for the Buyed Product"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="NameDetail"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView52"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView53"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="EmailDetail"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView32"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="AddressDetail"
+            android:textColor="@color/black" />
+    </LinearLayout>
 
     <!--  ...  -->
+
 
     <com.stripe.android.view.CardInputWidget
         android:id="@+id/cardInputWidget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-     />
-
+        android:layout_marginTop="20dp" />
 
 
     <Button
-        android:text="pay"
+        android:id="@+id/payButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/payButton"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@android:color/holo_green_light"/>
+        android:backgroundTint="@android:color/holo_green_light"
+        android:text="pay" />
+
 
 </LinearLayout>
     <!--  ...  -->

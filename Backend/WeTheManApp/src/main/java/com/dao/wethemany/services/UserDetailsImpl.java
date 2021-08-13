@@ -18,6 +18,29 @@ public class UserDetailsImpl implements UserDetails {
 	private String id;
 
 	private String email;
+	
+	private String fullName;
+	
+	private String currentAddress;
+	
+	
+
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getCurrentAddress() {
+		return currentAddress;
+	}
+
+	public void setCurrentAddress(String currentAddress) {
+		this.currentAddress = currentAddress;
+	}
 
 	@JsonIgnore
 	private String password;
@@ -25,11 +48,13 @@ public class UserDetailsImpl implements UserDetails {
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public UserDetailsImpl(String id,String email, String password,
-			Collection<? extends GrantedAuthority> authorities) {
+			Collection<? extends GrantedAuthority> authorities, String fullName, String currentAddress) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.authorities = authorities;
+		this.fullName=fullName;
+		this.currentAddress=currentAddress;
 	}
 
 	public static UserDetailsImpl build(User user) {
@@ -41,7 +66,10 @@ public class UserDetailsImpl implements UserDetails {
 				user.getId(), 
 				user.getEmail(),
 				user.getPassword(), 
-				authorities);
+				authorities,
+				user.getFullName(),
+				user.getCurrentAddress()
+				);
 	}
 
 	@Override

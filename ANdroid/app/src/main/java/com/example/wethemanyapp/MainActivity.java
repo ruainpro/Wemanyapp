@@ -112,16 +112,27 @@ import java.util.Set;
             @Override
             public void onClick(View v) {
 
+                EditText ediText_register_fullNamae= (EditText) findViewById(R.id.ediText_register_firstName);
+                String ediText_register_fullNamaeText=ediText_register_fullNamae.getText().toString();
+
+                EditText ediText_register_address= (EditText) findViewById(R.id.ediText_register_address);
+                String ediText_register_addressText=ediText_register_address.getText().toString();
+
                 EditText ediText_register_email= (EditText) findViewById(R.id.ediText_register_email);
                 String ediText_register_emailText=ediText_register_email.getText().toString();
+
                 EditText ediText_register_password= (EditText) findViewById(R.id.ediText_register_password);
                 String ediText_register_passwordText=ediText_register_password.getText().toString();
+
                 EditText ediText_register_confirmpassword= (EditText) findViewById(R.id.ediText_register_confirmpassword);
                 String ediText_register_confirmpasswordText=ediText_register_confirmpassword.getText().toString();
 
 
-                if(ediText_register_emailText.isEmpty() || ediText_register_passwordText.isEmpty() || ediText_register_confirmpasswordText.isEmpty()){
+                if(ediText_register_emailText.isEmpty() || ediText_register_passwordText.isEmpty() || ediText_register_confirmpasswordText.isEmpty()
+                || ediText_register_fullNamaeText.isEmpty() || ediText_register_addressText.isEmpty()){
 
+                    ediText_register_fullNamae.setError("Enter FullName Please");
+                    ediText_register_address.setError("Enter Current Address Please");
                     ediText_register_email.setError("Enter Email Please");
 //                    ediText_login_email.setForeground(new C);
                     ediText_register_password.setError("Enter Password Please");
@@ -133,6 +144,9 @@ import java.util.Set;
                         User user=new User();
                         user.setEmail(ediText_register_emailText);
                         user.setPassword(ediText_register_passwordText);
+                        user.setFullName(ediText_register_fullNamaeText);
+                        user.setCurrentAddres(ediText_register_addressText);
+
                         Role role =new Role();
                         role.setName(ERole.ROLE_USER);
 

@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
        View view= inflater.inflate(R.layout.fragment_home, container, false);
         //Retrieve token wherever necessary
         SharedPreferences preferences = getActivity().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
-        UserEmail = preferences.getString("User_EMAIL",null);//second parameter default value.
+        UserEmail = preferences.getString("User_Name",null);//second parameter default value.
 
 //        Getting flating button and initialising to here
         FloatingActionButton floatingActionButton=(FloatingActionButton) view.findViewById(R.id.add_fab);

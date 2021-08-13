@@ -35,7 +35,7 @@ public class UsersImplementation {
     private static final String TAG = UsersImplementation.class.getSimpleName();
     public String returnresponses;
 
-    String BASE_URL = "http://10.0.2.2:8080/";
+    String BASE_URL = "https://wemanyappru.herokuapp.com/";
     OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
     Retrofit.Builder builder = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create());
 
@@ -105,6 +105,9 @@ public class UsersImplementation {
                        SharedPreferences preferences = context.getSharedPreferences("MY_APP",Context.MODE_PRIVATE);
                        preferences.edit().putString("BEARER_TOKEN",response.body().getAccessToken()).apply();
                        preferences.edit().putString("User_EMAIL",response.body().getEmail()).apply();
+                       preferences.edit().putString("User_Name",response.body().getFullName()).apply();
+                       preferences.edit().putString("User_Address",response.body().getCurrentAddres()).apply();
+
 
                        Intent intent = new Intent(context, Activity_Fragment_JoinMaian.class);
                        context.startActivity(intent);
@@ -144,13 +147,18 @@ public class UsersImplementation {
                         EditText ediText_register_confirmpassword= (EditText) activity.findViewById(R.id.ediText_register_confirmpassword);
                         ediText_register_confirmpassword.setText("");
 
+                        EditText ediText_register_fullNamae= (EditText) activity.findViewById(R.id.ediText_register_firstName);
+                        EditText ediText_register_address= (EditText) activity.findViewById(R.id.ediText_register_address);
+
+                        ediText_register_fullNamae.setError("");
+                        ediText_register_address.setError("");
                         final AlertDialog.Builder dialog = new AlertDialog.Builder(activity).setTitle("Sucessfull").
-                                setMessage("Sucessfully Created Account");
+                        setMessage("Sucessfully Created Account");
 
                         final AlertDialog alert = dialog.create();
                         alert.show();
 
-// Hide after some seconds
+                        // Hide after some seconds
                         final Handler handler  = new Handler();
                         final Runnable runnable = new Runnable() {
                             @Override
@@ -160,7 +168,6 @@ public class UsersImplementation {
                                 }
                             }
                         };
-
                         alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
@@ -169,9 +176,7 @@ public class UsersImplementation {
                         });
 
                         handler.postDelayed(runnable, 2000);
-
                         getloginstatus();
-
                     }
                 }
             }

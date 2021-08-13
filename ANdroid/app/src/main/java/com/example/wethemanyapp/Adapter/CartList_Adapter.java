@@ -98,12 +98,18 @@ public class CartList_Adapter extends RecyclerView.Adapter<CartList_Adapter.Cart
         holder.checkBox2_addforpayment.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG,"Status : "+isChecked);
+                Log.d(TAG,"Status : "+isChecked+ "Postion: "+position);
 
                 if(isChecked ==true){
-                    cart_Fragment.cartedOne.add(ostbindit);
+
+                    cart_Fragment.cartsreturnValueList.get(position).setItemcartedOrNotAdapter(true);
+//                    cart_Fragment.cartedOne.add(ostbindit);
                 }else{
-                    cart_Fragment.cartedOne.remove(position);
+                    cart_Fragment.cartsreturnValueList.get(position).setItemcartedOrNotAdapter(false);
+
+//                    ostbindit.setItemcartedOrNotAdapter(false);
+
+//                    cart_Fragment.cartedOne.remove(position);
                 }
                 cart_Fragment.displayTheTotalorSomething();
 
@@ -122,6 +128,7 @@ public class CartList_Adapter extends RecyclerView.Adapter<CartList_Adapter.Cart
 
     // method for filtering our recyclerview items.
     public void filterList(ArrayList<Carts> filterllist) {
+
         // below line is to add our filtered
         // list in our course array list.
         carts = filterllist;

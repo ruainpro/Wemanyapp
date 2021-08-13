@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="32dp" />
+        app:layout_constraintGuide_end="27dp" />
 
 
     <View
@@ -61,12 +61,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
         android:layout_marginTop="8dp"
         android:letterSpacing=".2"
-        android:text="2459702663"
+        android:text="@string/app_name"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -77,8 +76,7 @@
         android:layout_width="49dp"
         android:layout_height="50dp"
         android:layout_gravity="start"
-        android:layout_marginStart="96dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="24dp"
         android:padding="0dp"
         android:textAlignment="textStart"
         android:textAllCaps="false"
@@ -88,21 +86,17 @@
         app:iconPadding="4dp"
         app:iconSize="60dp"
         app:iconTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toTopOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.0"
         app:rippleColor="@color/white"
         tools:ignore="SpeakableTextPresentCheck" />
+
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="4dp"
         android:text="Name"
@@ -116,15 +110,14 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="4dp"
         android:text="Omar Herwitz"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
 
     <EditText
         android:id="@+id/search_fragmentSeeting"
@@ -158,6 +151,21 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_fragmentSeeting" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="49dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp"
+        android:foregroundTint="@color/white"
+        android:src="@android:drawable/ic_menu_info_details"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/settingBtn"
+        app:srcCompat="@drawable/ic_infocus_foreground"
+        app:tint="@color/white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

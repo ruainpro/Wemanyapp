@@ -36,6 +36,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,13 +100,13 @@ public class Cart_Fragment extends Fragment {
     private String paymentIntentClientSecret;
     private Stripe stripe;
 
-    public ArrayList<Carts> cartedOne=new ArrayList<Carts>();
+//    public ArrayList<Carts> cartedOne=new ArrayList<Carts>();
 
 
     RecyclerView cartsRecycleView;
 
     CartList_Adapter cartlistFrame_adapter;
-    ArrayList<Carts> cartsreturnValueList= new ArrayList<Carts>();
+    public ArrayList<Carts> cartsreturnValueList= new ArrayList<Carts>();
 
     OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
     Retrofit.Builder builder = new Retrofit.Builder().baseUrl(Url.URLone).addConverterFactory(GsonConverterFactory.create());
@@ -120,7 +121,6 @@ public class Cart_Fragment extends Fragment {
     Dialog dialog;
 
     String BEARER_TOKEN="";
-    ArrayList<Carts> filteredlist= new ArrayList<Carts>();
 
     public Cart_Fragment() {
         // Required empty public constructor
@@ -172,9 +172,11 @@ public class Cart_Fragment extends Fragment {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!(String.valueOf(s).isEmpty())){
-                    filter(s.toString());
-                }
+                filter(s.toString());
+
+//                if (!(String.valueOf(s).isEmpty())){
+//                    filter(s.toString());
+//                }
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -201,16 +203,18 @@ public class Cart_Fragment extends Fragment {
 
     private void filter(String text) {
 
+        ArrayList<Carts> filteredlist= new ArrayList<Carts>();
+
 //        ArrayList<Carts> filteredlist= new ArrayList<Carts>();
         for (Carts item : cartsreturnValueList) {
             // checking if the entered string matched with any item of our recycler view.
-            if (item.getCartedDate().toString().toLowerCase().contains(text.toLowerCase()) ||
-                    (item.getProduct().getCategory().toLowerCase().contains(text.toLowerCase()) ||
+            if (item.getProduct().getCategory().toLowerCase().contains(text.toLowerCase()) ||
                     (item.getProduct().getName().toLowerCase().contains(text.toLowerCase())
-                    ))) {
+                    )) {
                 // if the item is matched we are
                 // adding it to our filtered list.
                 filteredlist.add(item);
+
             }
         }
         if (filteredlist.isEmpty()) {
@@ -226,6 +230,7 @@ public class Cart_Fragment extends Fragment {
 
     public void getAlCartData() {
 
+        cartsreturnValueList.clear();
         Interface_Product productClient = retrofit.create(Interface_Product.class);
         String BearerToken="Bearer "+BEARER_TOKEN;
 
@@ -268,6 +273,22 @@ public class Cart_Fragment extends Fragment {
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.customcheckout);
 
+        ImageView imageView15= (ImageView) dialog.findViewById(R.id.imageView15);
+        imageView15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+        TextView textView23Name = (TextView) dialog.findViewById(R.id.textView23);
+        TextView textView53Email = (TextView) dialog.findViewById(R.id.textView53);
+        TextView textView33Address = (TextView) dialog.findViewById(R.id.textView33);
+
+        SharedPreferences preferences = getContext().getSharedPreferences("MY_APP",Context.MODE_PRIVATE);
+        textView53Email.setText(preferences.getString("User_EMAIL",null));
+        textView23Name.setText(preferences.getString("User_Name",null));
+        textView33Address.setText(preferences.getString("User_Address",null));
+
         Button dialogButton = (Button) dialog.findViewById(R.id.payButton);
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,13 +329,16 @@ public class Cart_Fragment extends Fragment {
 //            paymentInfo.setPayment_Amount(1000);
             purchasing.setPaymentInfo(paymentInfo);
             ArrayList<PurchasedProduct> purchasedProductsArraya =new ArrayList<PurchasedProduct>();
-           if( (! cartedOne.isEmpty()) || (cartedOne !=null)){
-               for(Carts carts:cartedOne){
-                   PurchasedProduct purchasedProduct=new PurchasedProduct();
-                   purchasedProduct.setProductId(carts.getProductid());
-                   purchasedProduct.setProductQuantity(carts.getQuantity());
-                   purchasedProduct.setCartId(carts.getId());
-                   purchasedProductsArraya.add(purchasedProduct);
+           if( (! cartsreturnValueList.isEmpty()) || (cartsreturnValueList !=null)){
+               for(Carts carts:cartsreturnValueList){
+                   if(carts.isItemcartedOrNotAdapter()==true){
+                       PurchasedProduct purchasedProduct=new PurchasedProduct();
+                       purchasedProduct.setProductId(carts.getProductid());
+                       purchasedProduct.setProductQuantity(carts.getQuantity());
+                       purchasedProduct.setCartId(carts.getId());
+                       purchasedProductsArraya.add(purchasedProduct);
+                   }
+
 
                }
                purchasing.setPurchasedproduct(purchasedProductsArraya);
@@ -350,7 +374,6 @@ public class Cart_Fragment extends Fragment {
                     dialog.cancel();
                     Log.d(TAG,"response.isSuccessful()");
                     cartsreturnValueList.clear();
-                    cartedOne.clear();
                     getAlCartData();
 
                     LinearLayout returnmessageHodler=getView().findViewById(R.id.returnmessageHodler);
@@ -409,23 +432,27 @@ public class Cart_Fragment extends Fragment {
     public void displayTheTotalorSomething(){
 
         Button continue_button=(Button) getView().findViewById(R.id.continue_button);
+        int totalSize=0;
 
-        if(!cartedOne.isEmpty() || cartedOne!=null){
+        if(!cartsreturnValueList.isEmpty() || cartsreturnValueList!=null){
             double totalCOst=0;
-            for(Carts cat:cartedOne){
-                double priceAmnt=cat.getQuantity()*cat.getProduct().getPrice();
-                totalCOst=totalCOst+priceAmnt;
+            for(Carts cat:cartsreturnValueList){
+                if(cat.isItemcartedOrNotAdapter()==true){
+                    double priceAmnt=cat.getQuantity()*cat.getProduct().getPrice();
+                    totalCOst=totalCOst+priceAmnt;
+                    totalSize=totalSize+1;
+                }
+
             }
             TextView totalPriceCart= getView().findViewById(R.id.totalPriceCart);
             totalPriceCart.setText(String.valueOf(totalCOst));
 
             TextView totalaCountOfProduct= getView().findViewById(R.id.totalaPricecountCarts);
-            totalaCountOfProduct.setText("Total Price (" +cartedOne.size()+ " items)");
+            totalaCountOfProduct.setText("Total Price (" +totalSize+ " items)");
             continue_button.setVisibility(View.VISIBLE);
         }
 
-        if(cartedOne.size()==0){
-            Log.d(TAG," 1 ===  "+cartedOne.size());
+        if(totalSize==0){
             continue_button.setVisibility(View.GONE);
         }
 
@@ -449,7 +476,6 @@ public class Cart_Fragment extends Fragment {
                 if(response.body().getReturnStatus()==1){
                     Toast.makeText(getContext(),"Sucessfully Deleted",Toast.LENGTH_SHORT);
                     cartsreturnValueList.clear();
-                    cartedOne.clear();
                     getAlCartData();
 
                     showDialog("Sucessfull", "Sucessfully Deleted");

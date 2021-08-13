@@ -8,6 +8,8 @@ public class JwtResponse {
 	private String id;
 	private String email;
 	private List<String> roles;
+	private String fullName;
+	private String currentAddress;
 
 	@Override
 	public String toString() {
@@ -17,7 +19,25 @@ public class JwtResponse {
 				", id='" + id + '\'' +
 				", email='" + email + '\'' +
 				", roles=" + roles +
+				", fullName='" + fullName + '\'' +
+				", currentAddres='" + currentAddress + '\'' +
 				'}';
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getCurrentAddres() {
+		return currentAddress;
+	}
+
+	public void setCurrentAddres(String currentAddres) {
+		this.currentAddress = currentAddres;
 	}
 
 	public String getAccessToken() {

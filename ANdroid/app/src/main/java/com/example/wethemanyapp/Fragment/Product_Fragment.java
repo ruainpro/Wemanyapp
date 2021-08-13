@@ -94,8 +94,6 @@ public class Product_Fragment extends Fragment {
         }
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,9 +113,11 @@ public class Product_Fragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!(String.valueOf(s).isEmpty())){
-                    filter(s.toString());
-                }
+                filter(s.toString());
+
+//                if (!(String.valueOf(s).isEmpty())){
+//                    filter(s.toString());
+//                }
             }
 
             @Override
