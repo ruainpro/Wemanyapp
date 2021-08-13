@@ -150,8 +150,8 @@ public class UsersImplementation {
                         EditText ediText_register_fullNamae= (EditText) activity.findViewById(R.id.ediText_register_firstName);
                         EditText ediText_register_address= (EditText) activity.findViewById(R.id.ediText_register_address);
 
-                        ediText_register_fullNamae.setError("");
-                        ediText_register_address.setError("");
+                        ediText_register_fullNamae.setText("");
+                        ediText_register_address.setText("");
                         final AlertDialog.Builder dialog = new AlertDialog.Builder(activity).setTitle("Sucessfull").
                         setMessage("Sucessfully Created Account");
 

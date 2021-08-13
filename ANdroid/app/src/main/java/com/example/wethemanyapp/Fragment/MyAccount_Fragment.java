@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wethemanyapp.Adapter.Historyproduct_adapter;
 import com.example.wethemanyapp.Adapter.ProductFrame_Adapter;
@@ -63,20 +64,7 @@ public class MyAccount_Fragment extends Fragment {
 
     Historyproduct_adapter purchasingproductFrame_adapter;
     ArrayList<Purchasing> purchasingreturnValueList= new ArrayList<Purchasing>();
-    ArrayList<Purchasing> filteredlist= new ArrayList<Purchasing>();
-
-
-//    OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-//
-//
-//    Retrofit.Builder builder = new Retrofit.Builder().baseUrl(Url.URLone).addConverterFactory(GsonConverterFactory.create());
-//
-//    Retrofit retrofit = builder.client(httpClient.build()).build();
-
-
-
     private static final String TAG = MyAccount_Fragment.class.getSimpleName();
-
 
     public MyAccount_Fragment() {
         // Required empty public constructor
@@ -125,8 +113,8 @@ public class MyAccount_Fragment extends Fragment {
 
         // Getting the login User Value Stored in SharedPreferences
         SharedPreferences preferences = getActivity().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
-        String UserEmail = preferences.getString("User_EMAIL",null);//second parameter default value.
-        textViewsetEmail.setText(UserEmail);
+        String User_Name = preferences.getString("User_Name",null);//second parameter default value.
+        textViewsetEmail.setText(User_Name);
 
         getAllPurchasedProduct(rootView);
         purchasingproductRecycleView = rootView.findViewById(R.id.historyRecycle_product_item);
@@ -188,8 +176,9 @@ public class MyAccount_Fragment extends Fragment {
 
     private void filter(String text) {
 
-//        ArrayList<Carts> filteredlist= new ArrayList<Carts>();
+        ArrayList<Purchasing> filteredlist= new ArrayList<Purchasing>();
 
+        if(purchasingreturnValueList !=null || ! purchasingreturnValueList.isEmpty()){
             for (Purchasing item : purchasingreturnValueList) {
                 // checking if the entered string matched with any item of our recycler view.
                 if (item.getPurchasedDate().toString().toLowerCase().contains(text.toLowerCase())) {
@@ -199,17 +188,18 @@ public class MyAccount_Fragment extends Fragment {
 
                 }
             }
-
-
-        if (filteredlist.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
-            Log.d(TAG,"No Data Found");
-        } else {
-            // at last we are passing that filtered
-            // list to our adapter class.
-            purchasingproductFrame_adapter.filterList(filteredlist);
+            if (filteredlist.isEmpty()) {
+                // if no item is added in filtered list we are
+                // displaying a toast message as no data found.
+//                Toast.makeText(getContext(), "No Data to Search", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"No Data Found");
+            } else {
+                // at last we are passing that filtered
+                // list to our adapter class.
+                purchasingproductFrame_adapter.filterList(filteredlist);
+            }
         }
+
     }
 
 

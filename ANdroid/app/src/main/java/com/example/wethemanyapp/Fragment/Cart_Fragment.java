@@ -164,25 +164,25 @@ public class Cart_Fragment extends Fragment {
         getAlCartData();
         cartsRecycleView = rootView.findViewById(R.id.recyclerview);
 
-        EditText earachTxt=rootView.findViewById(R.id.search_fragmentcartlist);
-        earachTxt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter(s.toString());
-
-//                if (!(String.valueOf(s).isEmpty())){
-//                    filter(s.toString());
-//                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+//        EditText earachTxt=rootView.findViewById(R.id.search_fragmentcartlist);
+//        earachTxt.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                filter(s.toString());
+//
+////                if (!(String.valueOf(s).isEmpty())){
+////                    filter(s.toString());
+////                }
+//            }
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
 
         if(finalProductValue >=1){
             Toast.makeText(getContext(), "Value AYo", Toast.LENGTH_SHORT).show();
@@ -325,25 +325,25 @@ public class Cart_Fragment extends Fragment {
             PaymentInfo paymentInfo=new PaymentInfo();
             paymentInfo.setPaymentInfo("pk_test_51JKHBOAjTCM92WB7z0EwBG7JH1mOwKnwpvdQOojyKsDta1aloOLbWHgpx25bdq0vVsadt6uOzwibXi0WqUZUJa8p00JG3zlV9n");
             paymentInfo.setPaymentMedium("US");
-        paymentInfo.setPayment_Amount(Double.valueOf(textview_price.getText().toString()));
+            paymentInfo.setPayment_Amount(Double.valueOf(textview_price.getText().toString()));
 //            paymentInfo.setPayment_Amount(1000);
             purchasing.setPaymentInfo(paymentInfo);
             ArrayList<PurchasedProduct> purchasedProductsArraya =new ArrayList<PurchasedProduct>();
-           if( (! cartsreturnValueList.isEmpty()) || (cartsreturnValueList !=null)){
-               for(Carts carts:cartsreturnValueList){
-                   if(carts.isItemcartedOrNotAdapter()==true){
-                       PurchasedProduct purchasedProduct=new PurchasedProduct();
-                       purchasedProduct.setProductId(carts.getProductid());
-                       purchasedProduct.setProductQuantity(carts.getQuantity());
-                       purchasedProduct.setCartId(carts.getId());
-                       purchasedProductsArraya.add(purchasedProduct);
-                   }
+            if( (! cartsreturnValueList.isEmpty()) || (cartsreturnValueList !=null)){
+                for(Carts carts:cartsreturnValueList){
+                    if(carts.isItemcartedOrNotAdapter()==true){
+                        PurchasedProduct purchasedProduct=new PurchasedProduct();
+                        purchasedProduct.setProductId(carts.getProductid());
+                        purchasedProduct.setProductQuantity(carts.getQuantity());
+                        purchasedProduct.setCartId(carts.getId());
+                        purchasedProductsArraya.add(purchasedProduct);
+                    }
 
 
-               }
-               purchasing.setPurchasedproduct(purchasedProductsArraya);
-               purchasedOne(purchasing);
-           }
+                }
+                purchasing.setPurchasedproduct(purchasedProductsArraya);
+                purchasedOne(purchasing);
+            }
 
 
         });
@@ -411,7 +411,7 @@ public class Cart_Fragment extends Fragment {
         if(status.equals("sucess")){
 //            getAlCartData(getView());
 //            returnmessageHodler
-           TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
+            TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
             purchaseReturnMessage.setText("Sucessfully Buyed The product, Check Email Receipt");
 
             TextView purchaseReturnsucesssorfaialure=getView().findViewById(R.id.purchaseReturnsucesssorfaialure);
@@ -420,13 +420,13 @@ public class Cart_Fragment extends Fragment {
 
         }
         else{
-        TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
-        purchaseReturnMessage.setText("Failed To Buyed The product, Sorry");
+            TextView purchaseReturnMessage=getView().findViewById(R.id.purchaseReturnMessage);
+            purchaseReturnMessage.setText("Failed To Buyed The product, Sorry");
 
-        TextView purchaseReturnsucesssorfaialure=getView().findViewById(R.id.purchaseReturnsucesssorfaialure);
-        purchaseReturnsucesssorfaialure.setText("Sorry");
-        purchaseReturnsucesssorfaialure.setTextColor(getResources().getColor(R.color.teal_700));
-    }
+            TextView purchaseReturnsucesssorfaialure=getView().findViewById(R.id.purchaseReturnsucesssorfaialure);
+            purchaseReturnsucesssorfaialure.setText("Sorry");
+            purchaseReturnsucesssorfaialure.setTextColor(getResources().getColor(R.color.teal_700));
+        }
 
     }
     public void displayTheTotalorSomething(){
@@ -491,8 +491,6 @@ public class Cart_Fragment extends Fragment {
         });
 
     }
-
-
 
     public void showDialog(String title, String Message){
         final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext()).setTitle(title).

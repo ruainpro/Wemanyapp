@@ -2,17 +2,21 @@ package com.example.wethemanyapp.Fragment;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.FileUtils;
@@ -45,6 +49,7 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private static final String TAG = HomeFragment.class.getSimpleName();
+    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 0;
 
     TextView allCategory;
 
@@ -159,9 +164,47 @@ public class HomeFragment extends Fragment {
         imageView13_Whatsapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:0123456789"));
-                startActivity(callIntent);
+
+                if (ContextCompat.checkSelfPermission(getActivity(),
+                        android.Manifest.permission.CALL_PHONE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if
+
+                    (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                            android.Manifest.permission.CALL_PHONE)) {
+
+                        // Show an expanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+
+                        Toast.makeText(getActivity(),"Its Necessary To Call",Toast.LENGTH_LONG).show();
+
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]     {Manifest.permission.CALL_PHONE},
+                                MY_PERMISSIONS_REQUEST_CALL_PHONE);
+
+                    } else {
+
+                        // No explanation needed, we can request the     permission.
+
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]   {Manifest.permission.CALL_PHONE},
+                                MY_PERMISSIONS_REQUEST_CALL_PHONE);
+
+                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
+                }else{
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:0123456789"));
+                    startActivity(callIntent);
+
+                }
+
+
 
             }
         });
@@ -189,7 +232,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://drive.google.com/file/d/1F5FAtPOdf17Pj2koLdoHcYq0587L4EvP/view"));
+//                        Uri.parse("https://drive.google.com/file/d/1F5FAtPOdf17Pj2koLdoHcYq0587L4EvP/view"));
+                        Uri.parse("https://wemanyappru.herokuapp.com/api/auth/download/C02Calcuation.pdf"));
                 startActivity(browserIntent);
 
             }

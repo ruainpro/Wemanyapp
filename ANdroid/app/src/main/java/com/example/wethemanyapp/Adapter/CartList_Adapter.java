@@ -102,7 +102,14 @@ public class CartList_Adapter extends RecyclerView.Adapter<CartList_Adapter.Cart
 
                 if(isChecked ==true){
 
-                    cart_Fragment.cartsreturnValueList.get(position).setItemcartedOrNotAdapter(true);
+                    for (int i = 0; i <cart_Fragment.cartsreturnValueList.size() ; i++) {
+                        if(cart_Fragment.cartsreturnValueList.get(i).getId().equals(ostbindit.getId())){
+                            cart_Fragment.cartsreturnValueList.get(position).setItemcartedOrNotAdapter(true);
+
+                        }
+//                        if(cart_Fragment.cartsreturnValueList())
+
+                    }
 //                    cart_Fragment.cartedOne.add(ostbindit);
                 }else{
                     cart_Fragment.cartsreturnValueList.get(position).setItemcartedOrNotAdapter(false);

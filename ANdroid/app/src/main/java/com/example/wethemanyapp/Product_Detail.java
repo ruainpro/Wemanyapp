@@ -2,13 +2,11 @@ package com.example.wethemanyapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.FragmentTransaction;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,27 +18,21 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.example.wethemanyapp.Adapter.ViewPagerAdapter;
-import com.example.wethemanyapp.Fragment.History_Fragment;
-import com.example.wethemanyapp.Fragment.HomeFragment;
-import com.example.wethemanyapp.Fragment.MyAccount_Fragment;
+
 import com.example.wethemanyapp.Fragment.Product_Fragment;
 import com.example.wethemanyapp.Implementation.ProductImplementation;
 import com.example.wethemanyapp.Interface.Interface_Product;
 import com.example.wethemanyapp.Model.Carts;
 import com.example.wethemanyapp.Model.MessageResponse;
 import com.example.wethemanyapp.Model.Product;
-import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -74,17 +66,13 @@ public class Product_Detail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
 
-        ImageView imageView_Backbtn=findViewById(R.id.imageView_backBtn);
-        imageView_Backbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new HomeFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.mainframe, fragment).commit();
-//                getSupportFragmentManager().beginTransaction().add(R.id.mainframe,new Product_Fragment()).commit();
-
-            }
-        });
+//        ImageView imageView_Backbtn=findViewById(R.id.imageView_backBtn);
+//        imageView_Backbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
         Intent intent = getIntent();
         product_Id = intent.getStringExtra("product_Id");
