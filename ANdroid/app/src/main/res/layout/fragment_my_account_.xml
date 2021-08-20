@@ -167,6 +167,19 @@
             app:srcCompat="@drawable/ic_infocus_foreground"
             app:tint="@color/white" />
 
+        <ImageView
+            android:id="@+id/imageView16_acc"
+            android:layout_width="50dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_iconuserdetailsone"
+            app:layout_constraintBottom_toBottomOf="@+id/view"
+            app:layout_constraintStart_toEndOf="@+id/imageView14"
+            app:layout_constraintTop_toBottomOf="@+id/settingBtn"
+            app:tint="@color/white" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

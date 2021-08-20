@@ -1,11 +1,13 @@
 package com.example.wethemanyapp.Fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +35,8 @@ import com.example.wethemanyapp.Model.Purchasing;
 import com.example.wethemanyapp.Product_Detail;
 import com.example.wethemanyapp.R;
 import com.example.wethemanyapp.Url;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -119,6 +123,15 @@ public class MyAccount_Fragment extends Fragment {
         getAllPurchasedProduct(rootView);
         purchasingproductRecycleView = rootView.findViewById(R.id.historyRecycle_product_item);
 
+        ImageView imageView16_acc=(ImageView) rootView.findViewById(R.id.imageView16_acc);
+        imageView16_acc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayAlert("User Profiles");
+            }
+        });
+
+
         // Button and Code For Logout
         Button settingBtn=rootView.findViewById(R.id.settingBtn);
         settingBtn.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +212,44 @@ public class MyAccount_Fragment extends Fragment {
                 purchasingproductFrame_adapter.filterList(filteredlist);
             }
         }
+
+    }
+
+
+    private void displayAlert(@NonNull String title) {
+
+        // create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.userinfolayout, null);
+        builder.setView(customLayout);
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        ImageView imageButtonShowUsers = customLayout.findViewById(R.id.imageButton);
+        imageButtonShowUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+
+            }
+        });
+
+        SharedPreferences settings = getContext().getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+        String User_Name = settings.getString("User_Name",null);//second parameter default value.
+        String User_EMAIL = settings.getString("User_EMAIL",null);//second parameter default value.
+        String User_Address = settings.getString("User_Address",null);//second parameter default value.
+
+
+        TextView textView36Name=customLayout.findViewById(R.id.textView36);
+        textView36Name.setText(User_Name);
+        TextView textView36Email=customLayout.findViewById(R.id.textView39);
+        textView36Email.setText(User_EMAIL);
+        TextView textView36Address=customLayout.findViewById(R.id.textViewa39);
+        textView36Address.setText(User_Address);
+
 
     }
 
