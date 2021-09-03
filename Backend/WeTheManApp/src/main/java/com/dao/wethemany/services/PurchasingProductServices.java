@@ -119,5 +119,10 @@ public class PurchasingProductServices {
 		return messageResponse;
 		
 	}
+	
+	public Purchasing getPurchasedById(String id) {
+		
+		return purchasingInfoRepository.findById(id).get();
+	}
 
 }

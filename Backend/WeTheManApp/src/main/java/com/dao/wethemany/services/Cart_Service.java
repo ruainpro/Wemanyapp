@@ -52,6 +52,15 @@ public class Cart_Service {
 		
 	}
 	
+	
+	public Carts getAllCartsInfoById(String id) {
+		
+		MessageResponse messageResponse= new MessageResponse();		
+		Carts carts=carts_Repository.findById(id).get();		
+		return carts;
+		
+	}
+	
 	public MessageResponse deleteCartsById(String email, String id) {
 		
 		MessageResponse messageResponse= new MessageResponse();

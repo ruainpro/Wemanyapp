@@ -1,5 +1,7 @@
 package com.dao.wethemany.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,4 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return UserDetailsImpl.build(user);
 	}
 
+	
+	public User getUserByEmail(String email) {	
+		return userRepository.findByEmail(email).get();
+	}
+	
+	public List<User> getAllUsers() {	
+		return userRepository.findAll();
+	}
+	
 }
